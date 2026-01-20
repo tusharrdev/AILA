@@ -1403,6 +1403,7 @@ general_db = FAISS.load_local("my_vector_store", embeddings, allow_dangerous_des
 document_vector_stores = {}  # Store document-specific vector stores
 
 # Initialize the LLM
+import os
 groq_api_key = os.getenv("GROQ_API_KEY")
 llm = ChatGroq(groq_api_key=groq_api_key, model_name="llama3-70b-8192")
 
