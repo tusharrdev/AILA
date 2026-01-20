@@ -23,3 +23,4 @@ langchain-community
 langchain
 langchain-openai
 faiss-cpu
+langchain-google-genai
