@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AILA - Legal Q&A Community</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            overflow-x: hidden;
+            background: #000000;
+            min-height: 100vh;
+        }
+
+        /* Advanced animated background */
+        .bg-effects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .geometric-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 40% 70%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
+            animation: geometricShift 20s ease-in-out infinite;
+        }
+
+        @keyframes geometricShift {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            33% { transform: rotate(120deg) scale(1.1); }
+            66% { transform: rotate(240deg) scale(0.9); }
+        }
+
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .floating-element {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0px) translateX(0px) scale(1);
+                opacity: 0.4;
+            }
+            25% { 
+                transform: translateY(-30px) translateX(15px) scale(1.2);
+                opacity: 0.8;
+            }
+            50% { 
+                transform: translateY(-60px) translateX(-15px) scale(0.8);
+                opacity: 0.6;
+            }
+            75% { 
+                transform: translateY(-30px) translateX(-30px) scale(1.1);
+                opacity: 0.9;
+            }
+        }
+
+        /* Premium Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(25px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        header.scrolled {
+            background: rgba(0, 0, 0, 0.95);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 6%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            position: relative;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #ffffff, transparent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover::after {
+            transform: scaleX(1);
+        }
+
+        .nav-links {
+            margin-left: 300px;
+            display: flex;
+            list-style: none;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .nav-links li {
+            position: relative;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            padding: 0.5rem 0;
+            display: block;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #ffffff, rgba(255, 255, 255, 0.7));
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-left: 2rem;
+        }
+
+        .cta-button {
+            background: #ffffff;
+            color: #000000;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 25px 50px rgba(255, 255, 255, 0.2);
+        }
+
+        .cta-buttonn {
+            background: transparent;
+            color: #ffffff;
+            padding: 0.8rem 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            display: inline-block;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .cta-buttonn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .cta-buttonn:hover::before {
+            transform: scaleX(1);
+        }
+
+        .cta-buttonn:hover {
+            border-color: #ffffff;
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Mobile menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(25px);
+            padding: 2rem 6%;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu.active {
+            top: 80px;
+        }
+
+        .mobile-menu ul {
+            list-style: none;
+            text-align: center;
+        }
+
+        .mobile-menu ul li {
+            margin-bottom: 1.5rem;
+        }
+
+        .mobile-menu ul li a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 120px;
+            padding: 4rem 6% 2rem 6%;
+            max-width: 1600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeInUp 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-header h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            text-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
+        }
+
+        .page-header p {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .qa-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .form-section, .qa-section {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 3rem;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            height: 750px;
+        }
+
+        .form-section::before,
+        .qa-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transition: left 0.8s ease;
+        }
+
+        .form-section:hover::before,
+        .qa-section:hover::before {
+            left: 100%;
+        }
+
+        .form-section:hover,
+        .qa-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 40px 80px rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #ffffff;
+            letter-spacing: -0.01em;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -0.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: #ffffff;
+        }
+
+        .form-description {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #ffffff;
+            font-size: 0.95rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            font-size: 0.95rem;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(20px);
+        }
+
+        .form-group select {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .form-group select option {
+            background: #000000;
+            color: #ffffff;
+            padding: 0.5rem;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Form Validation Styles */
+        .form-group input.error,
+        .form-group select.error,
+        .form-group textarea.error {
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: block;
+        }
+
+        .submit-btn {
+            background: #ffffff;
+            color: #000000;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ffffff, #f0f0f0);
+            transition: transform 0.3s ease;
+            z-index: -1;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 30px 60px rgba(255, 255, 255, 0.3);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem;
+            font-size: 0.95rem;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+        }
+
+        .qa-list {
+            max-height: 500px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .question {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .question:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .question-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .question-author {
+            font-weight: 600;
+            color: #ffffff;
+            font-size: 0.95rem;
+        }
+
+        .question-date {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .question-category {
+            background: #ffffff;
+            color: #000000;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .question-text {
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .answers-section {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1rem;
+        }
+
+        .answer {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 3px solid #ffffff;
+        }
+
+        .answer:last-child {
+            margin-bottom: 0;
+        }
+
+        .answer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .answer-author {
+            font-weight: 600;
+            color: #ffffff;
+            font-size: 0.9rem;
+        }
+
+        .answer-date {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .answer-text {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            font-size: 0.9rem;
+        }
+
+        .no-questions, .no-answer {
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            font-style: italic;
+            padding: 2rem 0;
+            font-size: 1rem;
+        }
+
+        .message {
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            font-weight: 500;
+            border: 1px solid;
+        }
+
+        .message.success {
+            background: rgba(39, 174, 96, 0.1);
+            color: #27ae60;
+            border-color: rgba(39, 174, 96, 0.3);
+        }
+
+        .message.error {
+            background: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+            border-color: rgba(231, 76, 60, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(25px);
+            padding: 5rem 6% 2rem 6%;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            margin-top: 6rem;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-main {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand {
+            max-width: 400px;
+        }
+
+        .footer-brand .logo {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .footer-brand p {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+
+        .footer-column h4 {
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-column ul li a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .footer-column ul li a:hover {
+            color: #ffffff;
+            transform: translateX(5px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-link {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .social-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+        }
+
+        .social-link i {
+            font-size: 1.2rem;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-bottom p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        /* Custom scrollbar */
+        .qa-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .qa-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        .qa-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+
+        .qa-list::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links,
+            .nav-buttons {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .main-content {
+                padding: 2rem 4%;
+            }
+
+            .qa-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .form-section,
+            .qa-section {
+                padding: 2rem;
+                height: auto;
+                min-height: 500px;
+            }
+
+            .footer-main {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                text-align: center;
+            }
+
+            .social-links {
+                justify-content: center;
+            }
+
+            .question-header {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .answer-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.25rem;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Premium selection styles */
+        ::selection {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #000000;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="bg-effects">
+        <div class="geometric-pattern"></div>
+        <div class="floating-elements" id="floatingElements"></div>
+    </div>
+
+    <header id="header">
+        <nav>
+            <div class="logo">AILA</div>
+            <ul class="nav-links">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'user_qa' %}">Ask Question</a></li>
+                <li><a href="{% url 'blog_list' %}">Blog</a></li>
+                <li><a href="{% url 'submit_feedback' %}">Feedback</a></li>
+                <li><a href="{% url 'about' %}">About Us</a></li>
+            </ul>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+            <div class="nav-buttons">
+                <a href="{% url 'login' %}" class="cta-button">Login</a>
+                <a href="{% url 'user_signup' %}" class="cta-buttonn">Sign Up</a>
+            </div>
+        </nav>
+        <div class="mobile-menu" id="mobileMenu">
+            <ul>
+                <li><a href="{% url 'home' %}" onclick="closeMobileMenu()">Home</a></li>
+                <li><a href="{% url 'user_qa' %}" onclick="closeMobileMenu()">Ask Question</a></li>
+                <li><a href="{% url 'blog_list' %}" onclick="closeMobileMenu()">Blog</a></li>
+                <li><a href="{% url 'submit_feedback' %}" onclick="closeMobileMenu()">Feedback</a></li>
+                <li><a href="{% url 'about' %}" onclick="closeMobileMenu()">About Us</a></li>
+                <li><a href="{% url 'login' %}" onclick="closeMobileMenu()">Login</a></li>
+                <li><a href="{% url 'user_signup' %}" onclick="closeMobileMenu()">Sign Up</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="page-header">
+            <h1>Legal Q&A Community</h1>
+            <p>Ask legal questions and get answers from verified lawyers</p>
+        </div>
+
+        <!-- Display Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message {% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div id="messageContainer"></div>
+
+        <div class="qa-container">
+            <!-- Ask Question Form -->
+            <div class="form-section">
+                <h2 class="section-title">Ask a Legal Question</h2>
+                
+                <form method="post" id="questionForm">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="id_name">Full Name*</label>
+                        <input type="text" name="name" id="id_name" placeholder="Enter your full name" required>
+                        <span class="error-message" id="id_nameError"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_email">Email Address*</label>
+                        <input type="email" name="email" id="id_email" placeholder="Enter your email address" required>
+                        <span class="error-message" id="id_emailError"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_area_of_law">Area of Law*</label>
+                        <select name="area_of_law" id="id_area_of_law" required>
+                            <option value="">Select area of law</option>
+                            <option value="Corporate Law">Corporate Law</option>
+                            <option value="Criminal Law">Criminal Law</option>
+                            <option value="Family Law">Family Law</option>
+                            <option value="Property Law">Property Law</option>
+                            <option value="Employment Law">Employment Law</option>
+                            <option value="Tax Law">Tax Law</option>
+                            <option value="Immigration Law">Immigration Law</option>
+                            <option value="Intellectual Property">Intellectual Property</option>
+                            <option value="Constitutional Law">Constitutional Law</option>
+                            <option value="Consumer Protection">Consumer Protection</option>
+                            <option value="Banking Law">Banking Law</option>
+                            <option value="Environmental Law">Environmental Law</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <span class="error-message" id="id_area_of_lawError"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_question_text">Your Legal Question*</label>
+                        <textarea name="question_text" id="id_question_text" placeholder="Describe your legal question in detail..." rows="5" required></textarea>
+                        <span class="error-message" id="id_question_textError"></span>
+                    </div>
+                    
+                    <div id="formMessageContainer"></div>
+                    
+                    <button type="submit" class="submit-btn">Submit Question</button>
+                </form>
+            </div>
+
+            <!-- Q&A Section -->
+            <div class="qa-section">
+                <h2 class="section-title">Community Q&A</h2>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search questions and answers...">
+
+                <div class="qa-list">
+                    {% for question in questions %}
+                        <div class="question" data-question="{{ question.question_text|lower }} {{ question.area_of_law|lower }}">
+                            <div class="question-header">
+                                <div class="question-meta">
+                                    <div class="question-author">{{ question.name }}</div>
+                                    <div class="question-date">{{ question.created_at|date:"M d, Y H:i" }}</div>
+                                </div>
+                                <span class="question-category">{{ question.area_of_law }}</span>
+                            </div>
+
+                            <div class="question-text">
+                                {{ question.question_text }}
+                            </div>
+
+                            {% if question.answers.all %}
+                                <div class="answers-section">
+                                    {% for answer in question.answers.all %}
+                                        <div class="answer">
+                                            <div class="answer-header">
+                                                <div class="answer-author">
+                                                    <strong>{{ answer.lawyer.full_name|default:answer.lawyer.email }}</strong>
+                                                    <span style="font-weight: normal; color: rgba(255, 255, 255, 0.6);"> - Verified Lawyer</span>
+                                                </div>
+                                                <div class="answer-date">{{ answer.created_at|date:"M d, Y H:i" }}</div>
+                                            </div>
+                                            <div class="answer-text">{{ answer.answer_text }}</div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="no-answer">Waiting for lawyer response...</div>
+                            {% endif %}
+                        </div>
+                    {% empty %}
+                        <div class="no-questions">
+                            <h3>No answered questions yet</h3>
+                            <p>Be the first to ask a question to our expert lawyers!</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-main">
+                <div class="footer-brand">
+                    <div class="logo">AILA</div>
+                    <p>AILA revolutionizes legal services by connecting clients with verified lawyers through AI-powered technology. Our platform offers seamless consultation, document generation, and case management for modern legal needs.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="YouTube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="#">Find Lawyers</a></li>
+                        <li><a href="#">Legal Consultation</a></li>
+                        <li><a href="#">Document Generation</a></li>
+                        <li><a href="#">Case Management</a></li>
+                        <li><a href="#">AI Legal Assistant</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Legal Guides</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Templates</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 AILA. All rights reserved. | Empowering legal solutions through technology.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Form validation
+        function validateForm() {
+            const form = document.getElementById('questionForm');
+            const fields = [
+                { id: 'id_name', name: 'Name', required: true, minLength: 2 },
+                { id: 'id_email', name: 'Email', required: true, type: 'email' },
+                { id: 'id_area_of_law', name: 'Area of Law', required: true },
+                { id: 'id_question_text', name: 'Question', required: true, minLength: 10 }
+            ];
+
+            let isValid = true;
+
+            fields.forEach(field => {
+                const input = document.getElementById(field.id);
+                const errorElement = document.getElementById(field.id + 'Error');
+                let error = '';
+
+                // Clear previous errors
+                input.classList.remove('error');
+                errorElement.textContent = '';
+
+                const value = input.value.trim();
+
+                // Required field validation
+                if (field.required && !value) {
+                    error = `${field.name} is required`;
+                    isValid = false;
+                }
+                // Email validation
+                else if (field.type === 'email' && value) {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(value)) {
+                        error = 'Please enter a valid email address';
+                        isValid = false;
+                    }
+                }
+                // Minimum length validation
+                else if (field.minLength && value && value.length < field.minLength) {
+                    error = `${field.name} must be at least ${field.minLength} characters`;
+                    isValid = false;
+                }
+
+                if (error) {
+                    input.classList.add('error');
+                    errorElement.textContent = error;
+                }
+            });
+
+            return isValid;
+        }
+
+        // Form submission - REMOVE the preventDefault to allow actual form submission
+        document.getElementById('questionForm').addEventListener('submit', function(e) {
+            if (!validateForm()) {
+                e.preventDefault(); // Only prevent if validation fails
+                return false;
+            }
+            
+            // Let the form submit normally if validation passes
+            // The Django view will handle the actual submission
+        });
+
+        // Show message function for form
+        function showFormMessage(text, type) {
+            const messageContainer = document.getElementById('formMessageContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = text;
+            messageDiv.style.marginBottom = '1rem';
+            
+            messageContainer.innerHTML = '';
+            messageContainer.appendChild(messageDiv);
+            
+            // Auto-hide message after 5 seconds
+            setTimeout(() => {
+                messageDiv.style.opacity = '0';
+                messageDiv.style.transform = 'translateY(-10px)';
+                messageDiv.style.transition = 'all 0.3s ease';
+                setTimeout(() => messageDiv.remove(), 300);
+            }, 5000);
+        }
+
+        // Show message function
+        function showMessage(text, type) {
+            const messageContainer = document.getElementById('messageContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = text;
+            
+            messageContainer.innerHTML = '';
+            messageContainer.appendChild(messageDiv);
+            
+            // Auto-hide message after 5 seconds
+            setTimeout(() => {
+                messageDiv.style.opacity = '0';
+                messageDiv.style.transform = 'translateY(-10px)';
+                messageDiv.style.transition = 'all 0.3s ease';
+                setTimeout(() => messageDiv.remove(), 300);
+            }, 5000);
+        }
+
+        // Real-time validation - only validate on submit or after user has attempted to submit
+        let hasAttemptedSubmit = false;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('#questionForm input, #questionForm select, #questionForm textarea');
+            
+            inputs.forEach(input => {
+                // Only show validation errors after user has tried to submit
+                input.addEventListener('blur', function() {
+                    if (hasAttemptedSubmit) {
+                        validateForm();
+                    }
+                });
+                
+                input.addEventListener('input', function() {
+                    // Clear error on input
+                    this.classList.remove('error');
+                    const errorElement = document.getElementById(this.id + 'Error');
+                    if (errorElement) {
+                        errorElement.textContent = '';
+                    }
+                });
+            });
+            
+            // Set flag when form is submitted
+            document.getElementById('questionForm').addEventListener('submit', function() {
+                hasAttemptedSubmit = true;
+            });
+        });
+
+        // Mobile menu functionality
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.remove('active');
+        }
+
+        // Create floating elements
+        function createFloatingElements() {
+            const container = document.getElementById('floatingElements');
+            const elementCount = 30;
+            
+            for (let i = 0; i < elementCount; i++) {
+                const element = document.createElement('div');
+                element.className = 'floating-element';
+                element.style.left = Math.random() * 100 + '%';
+                element.style.top = Math.random() * 100 + '%';
+                element.style.animationDelay = Math.random() * 8 + 's';
+                element.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                container.appendChild(element);
+            }
+        }
+
+        // Header scroll effect
+        function initHeaderScroll() {
+            const header = document.getElementById('header');
+            let scrolled = false;
+            
+            window.addEventListener('scroll', () => {
+                const shouldBeScrolled = window.scrollY > 50;
+                if (shouldBeScrolled !== scrolled) {
+                    scrolled = shouldBeScrolled;
+                    header.classList.toggle('scrolled', scrolled);
+                }
+            });
+        }
+
+        // Search functionality
+        const searchInput = document.getElementById("searchInput");
+        const questions = document.querySelectorAll(".question");
+
+        if (searchInput && questions.length > 0) {
+            searchInput.addEventListener("input", function () {
+                const query = this.value.toLowerCase();
+                questions.forEach(question => {
+                    const text = question.dataset.question;
+                    const answerTexts = Array.from(question.querySelectorAll('.answer-text'))
+                        .map(el => el.textContent.toLowerCase()).join(' ');
+                    const authorNames = Array.from(question.querySelectorAll('.answer-author'))
+                        .map(el => el.textContent.toLowerCase()).join(' ');
+                    
+                    const searchText = text + ' ' + answerTexts + ' ' + authorNames;
+                    question.style.display = searchText.includes(query) ? "block" : "none";
+                });
+            });
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            
+            if (mobileMenu && menuBtn && !mobileMenu.contains(event.target) && !menuBtn.contains(event.target)) {
+                mobileMenu.classList.remove('active');
+            }
+        });
+
+        // Initialize all functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            createFloatingElements();
+            initHeaderScroll();
+            
+            // Fade in effect
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+                document.body.style.transition = 'opacity 0.5s ease';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

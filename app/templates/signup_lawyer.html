@@ -1,0 +1,1481 @@
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AILA - Lawyer Sign Up | Legal Innovation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            overflow-x: hidden;
+            background: #000000;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        /* Advanced animated background with enhanced effects */
+        .bg-effects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .geometric-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.04) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.04) 0%, transparent 50%),
+                radial-gradient(circle at 40% 70%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 60% 30%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
+            animation: geometricShift 25s ease-in-out infinite;
+        }
+
+        @keyframes geometricShift {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(90deg) scale(1.05); }
+            50% { transform: rotate(180deg) scale(0.95); }
+            75% { transform: rotate(270deg) scale(1.02); }
+        }
+
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .floating-element {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 12s ease-in-out infinite;
+            box-shadow: 0 0 4px rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0px) translateX(0px) scale(1);
+                opacity: 0.3;
+            }
+            25% { 
+                transform: translateY(-40px) translateX(20px) scale(1.5);
+                opacity: 0.8;
+            }
+            50% { 
+                transform: translateY(-80px) translateX(-20px) scale(0.8);
+                opacity: 0.5;
+            }
+            75% { 
+                transform: translateY(-40px) translateX(-40px) scale(1.2);
+                opacity: 0.9;
+            }
+        }
+
+        /* Enhanced mesh gradient background */
+        .bg-effects::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(45deg, rgba(255, 255, 255, 0.01) 0%, transparent 50%),
+                linear-gradient(-45deg, rgba(255, 255, 255, 0.01) 0%, transparent 50%);
+            animation: meshMove 20s ease-in-out infinite;
+        }
+
+        @keyframes meshMove {
+            0%, 100% { opacity: 0.3; transform: scale(1) rotate(0deg); }
+            50% { opacity: 0.6; transform: scale(1.1) rotate(180deg); }
+        }
+
+        /* Premium container with enhanced glassmorphism */
+        .signup-container {
+            width: 100%;
+            max-width: 1000px;
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 28px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            max-height: 95vh;
+            overflow-y: auto;
+            box-shadow: 
+                0 0 100px rgba(255, 255, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 50px 100px rgba(0, 0, 0, 0.3);
+        }
+
+        .signup-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.04), transparent);
+            animation: shimmer 4s ease-in-out infinite;
+        }
+
+        .signup-container::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), transparent, rgba(255, 255, 255, 0.1));
+            border-radius: 30px;
+            z-index: -1;
+            animation: borderGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes borderGlow {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.7; }
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(80px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Enhanced logo with premium styling */
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .logo::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+            animation: logoGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes logoGlow {
+            0% { opacity: 0.3; width: 40px; }
+            100% { opacity: 1; width: 80px; }
+        }
+
+        .logo h1 {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #ffffff, rgba(255, 255, 255, 0.7), #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.4rem;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+            animation: textGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes textGlow {
+            0% { filter: brightness(1); }
+            100% { filter: brightness(1.2); }
+        }
+
+        .logo p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* Enhanced form title */
+        h2 {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 2.5rem;
+            letter-spacing: -0.01em;
+            user-select: none;
+            position: relative;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        }
+
+        /* Premium profile photo upload */
+        .photo-upload {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+
+        .profile-pic {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(25px);
+            box-shadow: 
+                0 10px 40px rgba(255, 255, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .profile-pic::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.3), transparent, rgba(255, 255, 255, 0.3));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .profile-pic:hover::before {
+            opacity: 1;
+        }
+
+        .profile-pic:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: scale(1.08) translateY(-5px);
+            box-shadow: 
+                0 20px 60px rgba(255, 255, 255, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+            border-radius: 50%;
+        }
+
+        .plus-icon {
+            font-size: 40px;
+            color: rgba(255, 255, 255, 0.7);
+            position: absolute;
+            z-index: 1;
+            transition: all 0.4s ease;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .profile-pic:hover .plus-icon {
+            color: #ffffff;
+            transform: scale(1.2) rotate(90deg);
+        }
+
+        /* Enhanced form styling */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .form-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Premium input container */
+        .input_container {
+            position: relative;
+            height: 78px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Enhanced labels */
+        label {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            height: 18px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        label::before {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.5);
+            transition: width 0.3s ease;
+        }
+
+        .input_container:focus-within label::before {
+            width: 30px;
+        }
+
+        /* Premium input container wrapper */
+        .input-container-wrapper {
+            position: relative;
+            height: 48px;
+        }
+
+        /* Enhanced inputs with premium styling */
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            height: 48px;
+            padding: 0 1rem;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.06);
+            color: #ffffff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(25px);
+            box-shadow: 
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 4px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        textarea {
+            height: 90px;
+            resize: vertical;
+            padding: 1rem;
+            line-height: 1.6;
+        }
+
+        select {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 1rem center;
+            background-repeat: no-repeat;
+            background-size: 1.2em 1.2em;
+            padding-right: 3rem;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
+        }
+
+        /* Enhanced focus states */
+        input:focus,
+        select:focus,
+        textarea:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 
+                0 0 0 4px rgba(255, 255, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                0 8px 30px rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px) scale(1.02);
+        }
+
+        /* Premium validation states */
+        input.valid,
+        select.valid,
+        textarea.valid {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+            box-shadow: 
+                0 0 0 4px rgba(34, 197, 94, 0.2),
+                inset 0 1px 0 rgba(34, 197, 94, 0.3),
+                0 8px 30px rgba(34, 197, 94, 0.1);
+        }
+
+        input.invalid,
+        select.invalid,
+        textarea.invalid {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+            box-shadow: 
+                0 0 0 4px rgba(239, 68, 68, 0.2),
+                inset 0 1px 0 rgba(239, 68, 68, 0.3),
+                0 8px 30px rgba(239, 68, 68, 0.1);
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* Enhanced validation messages */
+        .validation-message {
+            font-size: 0.75rem;
+            position: absolute;
+            top: 48px;
+            left: 0;
+            right: 0;
+            height: 12px;
+            transition: all 0.4s ease;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 5;
+            font-weight: 500;
+        }
+
+        .validation-message.show {
+            opacity: 1;
+            transform: translateY(2px);
+        }
+
+        .validation-message.error {
+            color: #ef4444;
+            text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+        }
+
+        .validation-message.success {
+            color: #22c55e;
+            text-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+        }
+
+        /* Django field errors */
+        .field-errors {
+            color: #ef4444;
+            font-size: 0.75rem;
+            position: absolute;
+            top: 62px;
+            left: 0;
+            right: 0;
+            height: 10px;
+            z-index: 4;
+            font-weight: 500;
+        }
+
+        /* Premium submit button */
+        button[type="submit"] {
+            height: 56px;
+            border-radius: 16px;
+            border: none;
+            outline: none;
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            color: #000000;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            margin-top: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 
+                0 10px 40px rgba(255, 255, 255, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+
+        button[type="submit"]::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            transition: left 0.8s ease;
+        }
+
+        button[type="submit"]::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.3) 50%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        button[type="submit"]:hover::before {
+            left: 100%;
+        }
+
+        button[type="submit"]:hover::after {
+            opacity: 1;
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 
+                0 20px 60px rgba(255, 255, 255, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            background: linear-gradient(135deg, #ffffff, #ffffff);
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(-2px) scale(1.01);
+        }
+
+        button[type="submit"]:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Enhanced loading state */
+        .loading {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+
+        .loading.active {
+            display: flex;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(0, 0, 0, 0.3);
+            border-top: 2px solid #000000;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Enhanced error message */
+        .error {
+            color: #ef4444;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            padding: 1rem;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 16px;
+            backdrop-filter: blur(25px);
+            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.2);
+        }
+
+        /* Premium links section */
+        .links {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.85rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            position: relative;
+        }
+
+        .links::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+        }
+
+        .links p {
+            margin-bottom: 0.6rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .links a {
+            color: #ffffff;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+        }
+
+        .links a::before {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ffffff, transparent);
+            transition: width 0.4s ease;
+        }
+
+        .links a:hover::before {
+            width: 100%;
+        }
+
+        .links a:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.1);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        /* File input styling */
+        input[type="file"] {
+            display: none;
+        }
+
+        /* Premium scrollbar */
+        .signup-container::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .signup-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+        }
+
+        .signup-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .signup-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Premium selection styles */
+        ::selection {
+            background: rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+        }
+
+        /* Enhanced focus indicators */
+        .input_container::after {
+            content: '';
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ffffff, transparent);
+            transition: all 0.4s ease;
+            transform: translateX(-50%);
+            opacity: 0;
+        }
+
+        .input_container:focus-within::after {
+            width: 100%;
+            opacity: 1;
+        }
+
+        /* Ripple effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(0);
+            animation: ripple-animation 0.8s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple-animation {
+            to {
+                transform: scale(6);
+                opacity: 0;
+            }
+        }
+
+        /* Mobile Responsive with enhanced styling */
+        @media (max-width: 768px) {
+            body {
+                padding: 0.5rem;
+            }
+
+            .signup-container {
+                padding: 2rem 1.5rem;
+                max-width: 100%;
+                border-radius: 24px;
+                margin: 0.5rem;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 1.2rem;
+            }
+
+            .logo h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.6rem;
+            }
+
+            input,
+            select,
+            textarea {
+                height: 44px;
+                font-size: 0.9rem;
+            }
+
+            .input-container-wrapper {
+                height: 44px;
+            }
+
+            button[type="submit"] {
+                height: 52px;
+                font-size: 0.95rem;
+            }
+
+            .profile-pic {
+                width: 110px;
+                height: 110px;
+            }
+
+            .plus-icon {
+                font-size: 32px;
+            }
+
+            .form-column {
+                gap: 1.2rem;
+            }
+
+            .input_container {
+                height: 72px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .signup-container {
+                padding: 1.5rem 1rem;
+            }
+
+            .logo h1 {
+                font-size: 1.8rem;
+            }
+
+            h2 {
+                font-size: 1.4rem;
+            }
+
+            .profile-pic {
+                width: 100px;
+                height: 100px;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Enhanced animations */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .profile-pic:hover {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* Premium hover effects for inputs */
+        input:hover,
+        select:hover,
+        textarea:hover {
+            border-color: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Enhanced webkit number input styling */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="bg-effects">
+        <div class="geometric-pattern"></div>
+        <div class="floating-elements" id="floatingElements"></div>
+    </div>
+
+    <div class="signup-container">
+        <div class="logo">
+            <h1>AILA</h1>
+            <p>Legal Innovation Platform</p>
+        </div>
+
+        <h2>Lawyer Registration</h2>
+
+        <form method="post" enctype="multipart/form-data" id="lawyerSignupForm" novalidate>
+            {% csrf_token %}
+
+            <!-- Profile Image Upload -->
+            <div class="photo-upload">
+                <div class="profile-pic" onclick="document.getElementById('id_image').click();">
+                    <img id="preview" src="#" alt="Preview" />
+                    <span class="plus-icon">+</span>
+                </div>
+                {{ form.image|add_class:"" }}
+                {% if form.image.errors %}
+                    <div class="field-errors">{{ form.image.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Two Column Layout -->
+            <div class="form-row">
+                <div class="form-column">
+                    {% for field in form %}
+                        {% if field.name != 'image' and forloop.counter <= 5 %}
+                            <div class="input_container">
+                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                <div class="input-container-wrapper" {% if field.name == 'bio' %}style="height: 90px;"{% endif %}>
+                                    {{ field|add_class:"input" }}
+                                    <div class="validation-message" id="{{ field.name }}-validation" {% if field.name == 'bio' %}style="top: 90px;"{% endif %}></div>
+                                </div>
+                                {% if field.errors %}
+                                    <div class="field-errors" {% if field.name == 'bio' %}style="top: 102px;"{% endif %}>{{ field.errors }}</div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="form-column">
+                    {% for field in form %}
+                        {% if field.name != 'image' and forloop.counter > 5 %}
+                            <div class="input_container">
+                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                <div class="input-container-wrapper" {% if field.name == 'bio' %}style="height: 90px;"{% endif %}>
+                                    {{ field|add_class:"input" }}
+                                    <div class="validation-message" id="{{ field.name }}-validation" {% if field.name == 'bio' %}style="top: 90px;"{% endif %}></div>
+                                </div>
+                                {% if field.errors %}
+                                    <div class="field-errors" {% if field.name == 'bio' %}style="top: 102px;"{% endif %}>{{ field.errors }}</div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="submitBtn">
+                <span class="button-text">Register as Lawyer</span>
+                <div class="loading" id="loadingSpinner">
+                    <div class="spinner"></div>
+                    <span>Creating account...</span>
+                </div>
+            </button>
+        </form>
+
+        <div class="links">
+            <p>Are you a regular user? <a href="{% url 'user_signup' %}">Sign up here</a></p>
+            <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Clear form data on page load/back button
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+        
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted || window.performance && window.performance.navigation.type === 2) {
+                const form = document.getElementById('lawyerSignupForm');
+                const submitBtn = document.getElementById('submitBtn');
+                const buttonText = document.querySelector('.button-text');
+                const loadingSpinner = document.getElementById('loadingSpinner');
+                
+                if (form) {
+                    form.reset();
+                    const inputs = form.querySelectorAll('input, select, textarea');
+                    inputs.forEach(input => {
+                        input.classList.remove('valid', 'invalid');
+                        if (input.type !== 'file') input.value = '';
+                    });
+                    const validationMessages = form.querySelectorAll('.validation-message');
+                    validationMessages.forEach(msg => {
+                        msg.className = 'validation-message';
+                        msg.textContent = '';
+                    });
+                }
+                
+                if (submitBtn) submitBtn.disabled = false;
+                if (buttonText) buttonText.style.display = 'inline';
+                if (loadingSpinner) loadingSpinner.classList.remove('active');
+            }
+        });
+
+        // Create enhanced floating elements
+        function createFloatingElements() {
+            const container = document.getElementById('floatingElements');
+            const elementCount = 40;
+            
+            for (let i = 0; i < elementCount; i++) {
+                const element = document.createElement('div');
+                element.className = 'floating-element';
+                element.style.left = Math.random() * 100 + '%';
+                element.style.top = Math.random() * 100 + '%';
+                element.style.animationDelay = Math.random() * 12 + 's';
+                element.style.animationDuration = (Math.random() * 6 + 8) + 's';
+                element.style.width = element.style.height = (Math.random() * 2 + 1) + 'px';
+                container.appendChild(element);
+            }
+        }
+
+        // Enhanced image preview functionality
+        const imageInput = document.getElementById('id_image');
+        const previewImage = document.getElementById('preview');
+        const plusIcon = document.querySelector('.plus-icon');
+
+        if (imageInput) {
+            imageInput.addEventListener('change', function () {
+                const file = this.files[0];
+                if (file) {
+                    // Enhanced file validation
+                    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+                    if (!allowedTypes.includes(file.type)) {
+                        showNotification('Please select a valid image file (JPEG, PNG, GIF, or WebP)', 'error');
+                        this.value = '';
+                        return;
+                    }
+                    
+                    // File size validation (max 5MB)
+                    if (file.size > 5 * 1024 * 1024) {
+                        showNotification('Image size must be less than 5MB', 'error');
+                        this.value = '';
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        previewImage.src = e.target.result;
+                        previewImage.style.display = 'block';
+                        plusIcon.style.display = 'none';
+                        
+                        // Add success animation
+                        previewImage.style.opacity = '0';
+                        setTimeout(() => {
+                            previewImage.style.transition = 'opacity 0.5s ease';
+                            previewImage.style.opacity = '1';
+                        }, 100);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        // Enhanced notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'error' ? 'rgba(239, 68, 68, 0.9)' : 'rgba(34, 197, 94, 0.9)'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 12px;
+                backdrop-filter: blur(20px);
+                z-index: 10000;
+                font-weight: 600;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                animation: slideInRight 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Enhanced validation functions with comprehensive field support
+        function validateField(field, validationElement) {
+            const value = field.value.trim();
+            const fieldName = field.name;
+            let isValid = false;
+            let message = '';
+
+            // Get field label for better error messages
+            const label = field.closest('.input_container')?.querySelector('label')?.textContent || fieldName;
+
+            switch (fieldName) {
+                case 'full_name':
+                    if (value.length === 0) {
+                        message = 'Full name is required';
+                    } else if (value.length < 2) {
+                        message = 'Full name must be at least 2 characters';
+                    } else if (!/^[a-zA-Z\s.'-]+$/.test(value)) {
+                        message = 'Full name can only contain letters, spaces, periods, apostrophes, and hyphens';
+                    } else if (value.length > 100) {
+                        message = 'Full name must be less than 100 characters';
+                    } else {
+                        isValid = true;
+                    }
+                    break;
+
+                case 'email':
+                    if (value.length === 0) {
+                        message = 'Email is required';
+                    } else {
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+                        if (emailRegex.test(value)) {
+                            isValid = true;
+                        } else {
+                            message = 'Please enter a valid email address';
+                        }
+                    }
+                    break;
+
+                case 'password1':
+                    if (value.length === 0) {
+                        message = 'Password is required';
+                    } else if (value.length < 8) {
+                        message = 'Password must be at least 8 characters';
+                    } else if (!/(?=.*[a-z])/.test(value)) {
+                        message = 'Password must contain at least one lowercase letter';
+                    } else if (!/(?=.*[A-Z])/.test(value)) {
+                        message = 'Password must contain at least one uppercase letter';
+                    } else if (!/(?=.*\d)/.test(value)) {
+                        message = 'Password must contain at least one number';
+                    } else if (!/(?=.*[!@#$%^&*(),.?":{}|<>])/.test(value)) {
+                        message = 'Password must contain at least one special character';
+                    } else {
+                        isValid = true;
+                    }
+                    break;
+
+                case 'password2':
+                    const password1 = document.getElementById('id_password1')?.value || '';
+                    if (value.length === 0) {
+                        message = 'Please confirm your password';
+                    } else if (value !== password1) {
+                        message = 'Passwords do not match';
+                    } else {
+                        isValid = true;
+                    }
+                    break;
+
+                case 'phone_number':
+                    if (value.length === 0) {
+                        message = 'Phone number is required';
+                    } else {
+                        const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+                        const cleanPhone = value.replace(/[\s\-\(\)\.]/g, '');
+                        if (phoneRegex.test(cleanPhone) && cleanPhone.length >= 10) {
+                            isValid = true;
+                        } else {
+                            message = 'Please enter a valid phone number (min 10 digits)';
+                        }
+                    }
+                    break;
+
+                case 'bar_registration_number':
+                    if (value.length === 0) {
+                        message = 'Bar registration number is required';
+                    } else if (value.length < 3) {
+                        message = 'Bar registration number must be at least 3 characters';
+                    } else if (!/^[A-Z0-9\/\-_.]+$/i.test(value)) {
+                        message = 'Bar registration number contains invalid characters';
+                    } else if (value.length > 50) {
+                        message = 'Bar registration number is too long';
+                    } else {
+                        isValid = true;
+                    }
+                    break;
+
+                case 'state':
+                    if (value.length === 0 || value === '') {
+                        message = 'State selection is required';
+                    } else {
+                        isValid = true;
+                    }
+                    break;
+
+                case 'specialization':
+                    if (value.length === 0) {
+                        message = 'Specialization is required';
+                    } else if (value.length < 2) {
+                        message = 'Specialization must be at least 2 characters';
+                    } else if (value.length > 100) {
+                        message = 'Specialization must be less than 100 characters';
+                    } else {
+                        isValid = true;
+                    }
+                    break;
+
+                case 'years_of_experience':
+                    if (value.length === 0) {
+                        message = 'Years of experience is required';
+                    } else {
+                        const years = parseInt(value);
+                        if (isNaN(years) || years < 0) {
+                            message = 'Please enter a valid number of years';
+                        } else if (years > 70) {
+                            message = 'Years of experience seems unrealistic (max 70)';
+                        } else {
+                            isValid = true;
+                        }
+                    }
+                    break;
+
+                case 'bio':
+                    if (value.length === 0) {
+                        message = 'Professional bio is required';
+                    } else if (value.length < 50) {
+                        message = `Bio must be at least 50 characters (${value.length}/50)`;
+                    } else if (value.length > 2000) {
+                        message = `Bio exceeds maximum length (${value.length}/2000)`;
+                    } else {
+                        isValid = true;
+                        message = `${value.length}/2000 characters`;
+                    }
+                    break;
+
+                // Handle any additional fields dynamically
+                default:
+                    if (field.hasAttribute('required') && value.length === 0) {
+                        message = `${label} is required`;
+                    } else if (value.length > 0) {
+                        isValid = true;
+                    } else {
+                        isValid = true; // Non-required fields are valid when empty
+                    }
+                    break;
+            }
+
+            // Update field styling with enhanced animations
+            field.classList.remove('valid', 'invalid');
+            if (value.length > 0) {
+                field.classList.add(isValid ? 'valid' : 'invalid');
+            }
+
+            // Update validation message with enhanced styling
+            if (message && !isValid) {
+                validationElement.textContent = message;
+                validationElement.className = 'validation-message error show';
+            } else if (isValid && value.length > 0) {
+                if (fieldName === 'bio') {
+                    validationElement.textContent = message; // Show character count
+                    validationElement.className = 'validation-message success show';
+                } else {
+                    validationElement.textContent = '✓ Looks good!';
+                    validationElement.className = 'validation-message success show';
+                }
+            } else {
+                validationElement.textContent = '';
+                validationElement.className = 'validation-message';
+            }
+
+            return isValid;
+        }
+
+        // Enhanced form validation
+        function validateForm() {
+            const form = document.getElementById('lawyerSignupForm');
+            const fields = form.querySelectorAll('input[type="text"], input[type="email"], input[type="password"], input[type="number"], select, textarea');
+            
+            let allValid = true;
+            let firstInvalidField = null;
+
+            fields.forEach(field => {
+                if (field.type === 'file') return; // Skip file inputs
+                
+                const validationElement = field.closest('.input_container')?.querySelector('.validation-message');
+                if (validationElement) {
+                    const isValid = validateField(field, validationElement);
+                    if (!isValid && !firstInvalidField) {
+                        firstInvalidField = field;
+                        allValid = false;
+                    } else if (!isValid) {
+                        allValid = false;
+                    }
+                }
+            });
+
+            return { isValid: allValid, firstInvalidField };
+        }
+
+        // Enhanced DOM Content Loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            createFloatingElements();
+            
+            const form = document.getElementById('lawyerSignupForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const buttonText = document.querySelector('.button-text');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            
+            // Get all form fields
+            const formFields = form.querySelectorAll('input[type="text"], input[type="email"], input[type="password"], input[type="number"], select, textarea');
+
+            // Enhanced form clearing and setup
+            setTimeout(() => {
+                form.setAttribute('autocomplete', 'off');
+                
+                formFields.forEach(field => {
+                    if (field.type !== 'file') {
+                        field.value = '';
+                        field.setAttribute('autocomplete', 'off');
+                        field.setAttribute('autocapitalize', 'off');
+                        field.setAttribute('autocorrect', 'off');
+                        field.setAttribute('spellcheck', 'false');
+                        
+                        // Enhanced autofill prevention
+                        field.setAttribute('readonly', 'readonly');
+                        setTimeout(() => field.removeAttribute('readonly'), 150);
+                    }
+                });
+
+                // Focus enhancement
+                const firstField = form.querySelector('input[type="text"]');
+                if (firstField) {
+                    setTimeout(() => firstField.focus(), 200);
+                }
+                
+                // Clear validation states
+                formFields.forEach(field => {
+                    field.classList.remove('valid', 'invalid');
+                    const validationElement = field.closest('.input_container')?.querySelector('.validation-message');
+                    if (validationElement) {
+                        validationElement.className = 'validation-message';
+                        validationElement.textContent = '';
+                    }
+                });
+            }, 100);
+
+            // Enhanced input event listeners
+            formFields.forEach(field => {
+                if (field.type !== 'file') {
+                    // Clear validation on input
+                    field.addEventListener('input', function() {
+                        this.classList.remove('valid', 'invalid');
+                        const validationElement = this.closest('.input_container')?.querySelector('.validation-message');
+                        if (validationElement) {
+                            validationElement.className = 'validation-message';
+                            validationElement.textContent = '';
+                        }
+                    });
+
+                    // Real-time validation on blur
+                    field.addEventListener('blur', function() {
+                        const validationElement = this.closest('.input_container')?.querySelector('.validation-message');
+                        if (validationElement && this.value.trim().length > 0) {
+                            setTimeout(() => validateField(this, validationElement), 100);
+                        }
+                    });
+
+                    // Enhanced focus effects
+                    field.addEventListener('focus', function() {
+                        const wrapper = this.closest('.input-container-wrapper');
+                        if (wrapper) {
+                            wrapper.style.transform = 'scale(1.02) translateY(-2px)';
+                            wrapper.style.zIndex = '10';
+                        }
+                    });
+
+                    field.addEventListener('blur', function() {
+                        const wrapper = this.closest('.input-container-wrapper');
+                        if (wrapper) {
+                            wrapper.style.transform = 'scale(1) translateY(0)';
+                            wrapper.style.zIndex = '1';
+                        }
+                    });
+                }
+            });
+
+            // Enhanced form submission - Allow submission even with validation warnings
+            form.addEventListener('submit', function(e) {
+                // Don't prevent default submission, just add visual effects
+                
+                // Enhanced loading state
+                submitBtn.disabled = true;
+                buttonText.style.display = 'none';
+                loadingSpinner.classList.add('active');
+                
+                // Add form submission effect
+                form.style.opacity = '0.7';
+                form.style.pointerEvents = 'none';
+
+                // Let the form submit naturally
+            });
+
+            // Enhanced special field formatting
+            const phoneInput = document.getElementById('id_phone_number');
+            if (phoneInput) {
+                phoneInput.addEventListener('input', function() {
+                    let value = this.value.replace(/\D/g, '');
+                    if (value.length >= 10) {
+                        if (value.length === 10) {
+                            this.value = value.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+                        } else if (value.length === 11 && value[0] === '1') {
+                            this.value = value.replace(/(\d{1})(\d{3})(\d{3})(\d{4})/, '+$1 ($2) $3-$4');
+                        }
+                    }
+                });
+            }
+
+            // Enhanced bar registration formatting
+            const barInput = document.getElementById('id_bar_registration_number');
+            if (barInput) {
+                barInput.addEventListener('input', function() {
+                    this.value = this.value.toUpperCase();
+                });
+            }
+
+            // Enhanced bio character counter
+            const bioInput = document.getElementById('id_bio');
+            if (bioInput) {
+                const bioValidation = document.getElementById('bio-validation');
+                
+                bioInput.addEventListener('input', function() {
+                    const length = this.value.length;
+                    const maxLength = 2000;
+                    
+                    if (length > 0) {
+                        validateField(this, bioValidation);
+                    }
+                });
+            }
+
+            // Enhanced ripple effect for submit button
+            submitBtn.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('ripple');
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 800);
+            });
+
+            // Enhanced fade in effect
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.8s ease';
+                document.body.style.opacity = '1';
+            }, 100);
+
+            // Reset button state function
+            function resetButtonState() {
+                if (submitBtn) submitBtn.disabled = false;
+                if (buttonText) buttonText.style.display = 'inline';
+                if (loadingSpinner) loadingSpinner.classList.remove('active');
+                if (form) {
+                    form.style.opacity = '1';
+                    form.style.pointerEvents = 'auto';
+                }
+            }
+
+            resetButtonState();
+        });
+
+        // Enhanced page navigation handling
+        window.addEventListener('beforeunload', function() {
+            window.scrollTo(0, 0);
+        });
+
+        // Add CSS animations for notifications
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

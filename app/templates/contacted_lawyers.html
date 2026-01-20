@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Contacted Lawyers - AILA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: #ffffff;
+      overflow-x: hidden;
+      background: #000000;
+      min-height: 100vh;
+    }
+
+    /* Advanced animated background */
+    .bg-effects {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .geometric-pattern {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 40% 70%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
+      animation: geometricShift 20s ease-in-out infinite;
+    }
+
+    @keyframes geometricShift {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      33% { transform: rotate(120deg) scale(1.1); }
+      66% { transform: rotate(240deg) scale(0.9); }
+    }
+
+    .floating-elements {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    .floating-element {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 50%;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { 
+        transform: translateY(0px) translateX(0px) scale(1);
+        opacity: 0.4;
+      }
+      25% { 
+        transform: translateY(-30px) translateX(15px) scale(1.2);
+        opacity: 0.8;
+      }
+      50% { 
+        transform: translateY(-60px) translateX(-15px) scale(0.8);
+        opacity: 0.6;
+      }
+      75% { 
+        transform: translateY(-30px) translateX(-30px) scale(1.1);
+        opacity: 0.9;
+      }
+    }
+
+    /* Premium Header */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(25px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      z-index: 1000;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    header.scrolled {
+      background: rgba(0, 0, 0, 0.95);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 6%;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+      position: relative;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .logo::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, #ffffff, transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover::after {
+      transform: scaleX(1);
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .nav-links li {
+      position: relative;
+    }
+
+    .nav-links a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      padding: 0.5rem 0;
+      display: block;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #ffffff, rgba(255, 255, 255, 0.7));
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-links a:hover {
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    .nav-links a.active {
+      color: #ffffff;
+    }
+
+    .nav-links a.active::after {
+      width: 100%;
+    }
+
+    /* Header right section */
+    .header-right {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      margin-left: 2rem;
+    }
+
+    .welcome-text {
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 500;
+    }
+
+    .logout-btn {
+      background: #ffffff;
+      color: #000000;
+      padding: 0.8rem 2rem;
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      text-decoration: none;
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .logout-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .logout-btn:hover::before {
+      left: 100%;
+    }
+
+    .logout-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 25px 50px rgba(255, 255, 255, 0.2);
+    }
+
+    /* Mobile menu */
+    .mobile-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 4px;
+    }
+
+    .mobile-toggle span {
+      width: 25px;
+      height: 3px;
+      background: #ffffff;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    /* Main content */
+    .main-content {
+      margin-top: 120px;
+      padding: 2rem 8%;
+      min-height: calc(100vh - 120px);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    h2 {
+      text-align: center;
+      color: #ffffff;
+      margin-bottom: 3rem;
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      position: relative;
+      text-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 2px;
+      background: #ffffff;
+    }
+
+    .lawyer-list {
+      display: grid;
+      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
+
+    .lawyer-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 2rem;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .lawyer-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+      transition: left 0.8s ease;
+    }
+
+    .lawyer-card:hover::before {
+      left: 100%;
+    }
+
+    .lawyer-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 30px 60px rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .lawyer-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      gap: 1.5rem;
+    }
+
+    .lawyer-photo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 3px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.4s ease;
+      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+    }
+
+    .lawyer-card:hover .lawyer-photo {
+      border-color: #ffffff;
+      transform: scale(1.05);
+      box-shadow: 0 15px 40px rgba(255, 255, 255, 0.2);
+    }
+
+    .lawyer-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      transition: all 0.4s ease;
+    }
+
+    .lawyer-card:hover .lawyer-photo img {
+      transform: scale(1.1);
+    }
+
+    .lawyer-info {
+      flex: 1;
+    }
+
+    .lawyer-info h5 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .chat-btn {
+      background: #ffffff;
+      color: #000000;
+      padding: 0.7rem 1.5rem;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .chat-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .chat-btn:hover::before {
+      left: 100%;
+    }
+
+    .chat-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 40px rgba(255, 255, 255, 0.3);
+    }
+
+    .chat-btn::after {
+      content: '💬';
+      font-size: 1rem;
+    }
+
+    .book-btn {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .book-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .book-btn::after {
+      content: '📅';
+      font-size: 1rem;
+    }
+
+    .review-section {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .review-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .review-form label {
+      font-weight: 600;
+      color: #ffffff;
+      font-size: 1rem;
+    }
+
+    .review-form textarea {
+      resize: vertical;
+      padding: 1rem;
+      font-size: 0.95rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-family: inherit;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      min-height: 80px;
+      color: #ffffff;
+    }
+
+    .review-form textarea:focus {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);
+    }
+
+    .review-form textarea::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .star-rating {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: center;
+      gap: 0.3rem;
+      margin: 1rem 0;
+    }
+
+    .star-rating input[type="radio"] {
+      display: none;
+    }
+
+    .star-rating label {
+      font-size: 1.6rem;
+      color: rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .star-rating label:hover {
+      transform: scale(1.1);
+    }
+
+    .star-rating input[type="radio"]:checked ~ label,
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+      color: #f1c40f;
+      text-shadow: 0 0 15px rgba(241, 196, 15, 0.6);
+    }
+
+    .submit-btn {
+      background: #ffffff;
+      color: #000000;
+      padding: 0.8rem 2rem;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .submit-btn:hover::before {
+      left: 100%;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 40px rgba(255, 255, 255, 0.3);
+    }
+
+    .no-lawyers {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1.2rem;
+      padding: 4rem 2rem;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      margin: 2rem 0;
+    }
+
+    /* Message badge for individual chat buttons */
+    .chat-btn {
+      position: relative;
+    }
+
+    .message-count-badge {
+      background: #e74c3c !important;
+      color: white !important;
+      border-radius: 50%;
+      min-width: 20px;
+      height: 20px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      z-index: 999;
+      border: 2px solid white;
+      box-shadow: 0 2px 8px rgba(231, 76, 60, 0.6);
+      animation: pulse-notification 1.5s ease-in-out infinite;
+    }
+
+    .message-count-badge.show {
+      display: flex !important;
+    }
+
+    @keyframes pulse-notification {
+      0%, 100% { 
+        transform: scale(1); 
+        box-shadow: 0 2px 8px rgba(231, 76, 60, 0.6);
+      }
+      50% { 
+        transform: scale(1.1); 
+        box-shadow: 0 4px 12px rgba(231, 76, 60, 0.8);
+      }
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 1024px) {
+      nav {
+        padding: 1rem 4%;
+      }
+      
+      .main-content {
+        padding: 2rem 6%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      
+      .mobile-toggle {
+        display: flex;
+      }
+      
+      .header-right {
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-left: 1rem;
+      }
+
+      .welcome-text {
+        font-size: 0.8rem;
+      }
+
+      .logout-btn {
+        padding: 0.6rem 1.5rem;
+        font-size: 0.8rem;
+      }
+
+      .main-content {
+        margin-top: 100px;
+        padding: 1rem 4%;
+      }
+
+      .lawyer-card {
+        padding: 1.5rem;
+      }
+
+      .lawyer-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+      }
+
+      .lawyer-list {
+        grid-template-columns: 1fr;
+      }
+
+      .action-buttons {
+        justify-content: center;
+        width: 100%;
+      }
+
+      .chat-btn {
+        flex: 1;
+        justify-content: center;
+      }
+
+      h2 {
+        margin-bottom: 2rem;
+      }
+    }
+
+    /* Smooth scrolling */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Premium selection styles */
+    ::selection {
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #000000;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Animation for page load */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-on-load {
+      animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  </style>
+</head>
+<body>
+  <!-- Advanced animated background -->
+  <div class="bg-effects">
+    <div class="geometric-pattern"></div>
+    <div class="floating-elements" id="floating-elements"></div>
+  </div>
+
+  <!-- Header with Navigation -->
+  <header>
+    <nav>
+      <a class="logo">AILA</a> 
+      <ul class="nav-links">
+        <li><a href="{% url 'user_dashboard' %}">Dashboard</a></li>
+        <li><a href="{% url 'find_lawyer' %}">Find Lawyer</a></li>
+        <li><a href="{% url 'contacted_lawyers' %}" class="active">Contacted Lawyers</a></li>
+        <li><a href="{% url 'user_cases' %}">Case Status</a></li>
+        <li><a href="{% url 'doc' %}">Create Documents</a></li>
+        <li><a href="{% url 'chatbot' %}">Meet AI</a></li>
+      </ul>
+      <div class="header-right">
+        <span class="welcome-text">Welcome, {{ name }}</span>
+        <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+      </div>
+      <div class="mobile-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="container">
+      {% csrf_token %}
+      <h2 class="animate-on-load">Contacted Lawyers</h2>
+      <div class="lawyer-list animate-on-load">
+        {% for hire in hires %}
+          <div class="lawyer-card">
+            <div class="lawyer-header">
+              <div class="lawyer-photo">
+                <img src="{{ hire.lawyer.lawyerprofile.photo.url }}" alt="Lawyer Photo" />
+              </div>
+              <div class="lawyer-info">
+                <h5>{{ hire.lawyer.full_name }}</h5>
+                <div class="action-buttons">
+                  <a href="{% url 'chat_view' hire.lawyer.id %}" class="chat-btn" id="chat-btn-{{ hire.lawyer.id }}">
+                    Chat
+                    <span id="chat-badge-{{ hire.lawyer.id }}" class="message-count-badge" style="display: none;">0</span>
+                  </a>
+                  <a href="{% url 'book_appointment' hire.lawyer.id %}" class="chat-btn book-btn">Book</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Review Form -->
+            <div class="review-section">
+              <form action="{% url 'submit_review' hire.lawyer.id %}" method="POST" class="review-form">
+                {% csrf_token %}
+                <label for="review-{{ hire.lawyer.id }}">Leave a Review:</label>
+                <textarea id="review-{{ hire.lawyer.id }}" name="review" rows="3" placeholder="Write your review..."></textarea>
+
+                <div class="star-rating">
+                  {% for i in "54321" %}
+                    <input type="radio" id="star{{ i }}-{{ hire.lawyer.id }}" name="rating" value="{{ i }}" />
+                    <label for="star{{ i }}-{{ hire.lawyer.id }}" title="{{ i }} stars">&#9733;</label>
+                  {% endfor %}
+                </div>
+
+                <button type="submit" class="submit-btn">Submit Review</button>
+              </form>
+            </div>
+          </div>
+        {% empty %}
+          <p class="no-lawyers">You haven't hired any lawyers yet.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Create floating elements for background animation
+    function createFloatingElements() {
+      const container = document.getElementById('floating-elements');
+      for (let i = 0; i < 50; i++) {
+        const element = document.createElement('div');
+        element.className = 'floating-element';
+        element.style.left = Math.random() * 100 + '%';
+        element.style.top = Math.random() * 100 + '%';
+        element.style.animationDelay = Math.random() * 8 + 's';
+        container.appendChild(element);
+      }
+    }
+
+    // Header scroll effect
+    window.addEventListener('scroll', function() {
+      const header = document.querySelector('header');
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // Individual chat notifications for contacted lawyers
+    let userListSocket = null;
+
+    function initializeUserListSocket() {
+        const currentUserId = "{{ request.user.id }}";
+        userListSocket = new WebSocket(
+            'ws://' + window.location.host + '/ws/user_list/' + currentUserId + '/'
+        );
+
+        userListSocket.onopen = function(e) {
+            console.log('User list WebSocket connected');
+        };
+
+        userListSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            
+            if (data.action === 'new_message') {
+                updateChatBadge(data.sender_id);
+            }
+        };
+
+        userListSocket.onclose = function(e) {
+            console.error('User list socket closed unexpectedly');
+            setTimeout(initializeUserListSocket, 3000);
+        };
+    }
+
+    function updateChatBadge(lawyerId) {
+        const badge = document.getElementById(`chat-badge-${lawyerId}`);
+        if (badge) {
+            let currentCount = parseInt(badge.textContent) || 0;
+            currentCount++;
+            badge.textContent = currentCount;
+            badge.classList.add('show');
+            badge.style.display = 'flex';
+            console.log(`Updated badge for lawyer ${lawyerId} to ${currentCount}`);
+        }
+    }
+
+    function loadInitialChatBadges() {
+        fetch('/api/get-user-unread-counts/')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Initial badge data:', data.counts);
+                Object.keys(data.counts).forEach(lawyerId => {
+                    const count = data.counts[lawyerId];
+                    if (count > 0) {
+                        const badge = document.getElementById(`chat-badge-${lawyerId}`);
+                        if (badge) {
+                            badge.textContent = count;
+                            badge.classList.add('show');
+                            badge.style.display = 'flex';
+                            console.log(`Set initial badge for lawyer ${lawyerId} to ${count}`);
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Error loading chat badges:', error));
+    }
+
+    // Clear badge when chat button is clicked
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.chat-btn') && e.target.closest('.chat-btn').id.startsWith('chat-btn-')) {
+            const chatBtn = e.target.closest('.chat-btn');
+            const lawyerId = chatBtn.id.replace('chat-btn-', '');
+            const badge = document.getElementById(`chat-badge-${lawyerId}`);
+            if (badge) {
+                badge.style.display = 'none';
+                badge.classList.remove('show');
+                badge.textContent = '0';
+                
+                // Mark messages as read
+                markLawyerMessagesRead(lawyerId);
+            }
+        }
+    });
+
+    function markLawyerMessagesRead(lawyerId) {
+        fetch('/api/mark-user-messages-read/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify({
+                'user_id': lawyerId
+            })
+        }).then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log(`Marked messages as read for lawyer ${lawyerId}`);
+            }
+        });
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        createFloatingElements();
+        initializeUserListSocket();
+        setTimeout(() => {
+            loadInitialChatBadges();
+        }, 1000);
+    });
+  </script>
+</body>
+</html>

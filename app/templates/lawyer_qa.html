@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AILA - Lawyer Q&A Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Inter Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #000000;
+      min-height: 100vh;
+      padding: 2rem;
+      padding-top: 100px;
+      position: relative;
+      overflow-x: hidden;
+      color: #ffffff;
+    }
+
+    /* Premium Header */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(25px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      z-index: 1000;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 6%;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      padding: 0.5rem 0;
+    }
+
+    .nav-links a:hover {
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    .header-right {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .welcome-text {
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 500;
+    }
+
+    .logout-btn {
+      background: #ffffff;
+      color: #000000;
+      padding: 0.8rem 2rem;
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      text-decoration: none;
+    }
+
+    .logout-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 25px 50px rgba(255, 255, 255, 0.2);
+    }
+
+    .mobile-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 4px;
+    }
+
+    .mobile-toggle span {
+      width: 25px;
+      height: 3px;
+      background: #ffffff;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+    }
+
+    .header p {
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .section {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      border-radius: 16px;
+      padding: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .section h2 {
+      color: #ffffff;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      font-size: 1.5rem;
+    }
+
+    .questions-list {
+      max-height: 600px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .question-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 1.5rem;
+      border-left: 4px solid #e74c3c;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .answered-question {
+      border-left-color: #27ae60;
+    }
+
+    .question-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+    }
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+
+    .question-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .question-author {
+      font-weight: 600;
+      color: #ffffff;
+      font-size: 0.9rem;
+    }
+
+    .question-email {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .question-date {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .question-category {
+      background: #ffffff;
+      color: #000000;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .question-text {
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 1rem;
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .answer-form {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .answer-form textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 0.75rem;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+      resize: vertical;
+      margin-bottom: 0.75rem;
+    }
+
+    .answer-form textarea::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .answer-form textarea:focus {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.15);
+    }
+
+    .submit-answer-btn {
+      background: #ffffff;
+      color: #000000;
+      padding: 0.5rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .submit-answer-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+    }
+
+    .existing-answer {
+      background: rgba(40, 167, 69, 0.1);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 1rem;
+      border-left: 3px solid #27ae60;
+      border: 1px solid rgba(40, 167, 69, 0.2);
+    }
+
+    .answer-text {
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.6;
+      margin-bottom: 0.5rem;
+    }
+
+    .answer-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .edit-btn, .delete-btn {
+      padding: 0.25rem 0.75rem;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .edit-btn {
+      background: #f39c12;
+      color: white;
+    }
+
+    .delete-btn {
+      background: #e74c3c;
+      color: white;
+    }
+
+    .edit-btn:hover, .delete-btn:hover {
+      opacity: 0.8;
+      transform: translateY(-1px);
+    }
+
+    .edit-form {
+      margin-top: 0.75rem;
+    }
+
+    .edit-form textarea {
+      width: 100%;
+      min-height: 80px;
+      padding: 0.5rem;
+      border: 2px solid #f39c12;
+      border-radius: 6px;
+      font-family: inherit;
+      margin-bottom: 0.5rem;
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+    }
+
+    .edit-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .save-btn, .cancel-btn {
+      padding: 0.25rem 0.75rem;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .save-btn {
+      background: #27ae60;
+      color: white;
+    }
+
+    .cancel-btn {
+      background: #95a5a6;
+      color: white;
+    }
+
+    .no-questions {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.7);
+      font-style: italic;
+      padding: 2rem 0;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .stat-number {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #ffffff;
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .message {
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-weight: 500;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .message.success {
+      border-left: 4px solid #28a745;
+      color: #28a745;
+    }
+
+    .message.error {
+      border-left: 4px solid #dc3545;
+      color: #dc3545;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        position: fixed;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(25px);
+        flex-direction: column;
+        padding: 2rem;
+        gap: 1rem;
+        transform: translateY(-100%);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .nav-links.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .mobile-toggle {
+        display: flex;
+      }
+
+      body {
+        padding: 1rem;
+        padding-top: 100px;
+      }
+
+      .container {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .question-header {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+
+    /* Custom scrollbar */
+    .questions-list::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .questions-list::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 3px;
+    }
+
+    .questions-list::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 3px;
+    }
+
+    .questions-list::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">AILA</div>
+      <ul class="nav-links">
+        <li><a href="{% url 'lawyer_dashboard' %}">Dashboard</a></li>
+        <li><a href="{% url 'edit_profile' %}">Profile</a></li>
+        <li><a href="{% url 'messaged_users' %}">Messages</a></li>
+        <li><a href="{% url 'lawyer_case' %}">Cases</a></li>
+        <li><a href="{% url 'set_appointment' %}">Appointments</a></li>
+        <li><a href="{% url 'lawyer_blog' %}">Blog</a></li>
+        <li><a href="{% url 'lawyer_qa' %}">Q&A</a></li>
+        <li><a href="{% url 'document' %}">Documents</a></li>
+      </ul>
+      <div class="header-right">
+        <span class="welcome-text">Welcome, {{ request.user.full_name }}</span>
+        <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+      </div>
+      <div class="mobile-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </nav>
+  </header>
+  
+  <div class="header">
+    <h1>Lawyer Q&A Dashboard</h1>
+    <p>Answer community legal questions and help users with their legal concerns</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card">
+      <span class="stat-number">{{ unanswered_questions.count }}</span>
+      <span class="stat-label">Unanswered Questions</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number">{{ answered_by_lawyer.count }}</span>
+      <span class="stat-label">Your Answers</span>
+    </div>
+  </div>
+
+  <!-- Display Messages -->
+  {% if messages %}
+    {% for message in messages %}
+      <div class="message {% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% endif %}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="container">
+    <!-- Unanswered Questions -->
+    <div class="section">
+      <h2>Questions Awaiting Answers</h2>
+      <div class="questions-list">
+        {% for question in unanswered_questions %}
+          <div class="question-card">
+            <div class="question-header">
+              <div class="question-meta">
+                <div class="question-author">{{ question.name }}</div>
+                <div class="question-email">{{ question.email }}</div>
+                <div class="question-date">{{ question.created_at|date:"M d, Y H:i" }}</div>
+              </div>
+              <span class="question-category">{{ question.area_of_law }}</span>
+            </div>
+
+            <div class="question-text">
+              {{ question.question_text }}
+            </div>
+
+            <form method="post" class="answer-form">
+              {% csrf_token %}
+              <input type="hidden" name="question_id" value="{{ question.id }}">
+              <textarea name="answer_text" placeholder="Provide your professional legal answer here..." required></textarea>
+              <button type="submit" class="submit-answer-btn">Submit Answer</button>
+            </form>
+          </div>
+        {% empty %}
+          <div class="no-questions">
+            <h3>All caught up! 🎉</h3>
+            <p>No unanswered questions at the moment.</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Your Answered Questions -->
+    <div class="section">
+      <h2>Your Previous Answers</h2>
+      <div class="questions-list">
+        {% for question in answered_by_lawyer %}
+          <div class="question-card answered-question">
+            <div class="question-header">
+              <div class="question-meta">
+                <div class="question-author">{{ question.name }}</div>
+                <div class="question-date">{{ question.created_at|date:"M d, Y H:i" }}</div>
+              </div>
+              <span class="question-category">{{ question.area_of_law }}</span>
+            </div>
+
+            <div class="question-text">
+              {{ question.question_text }}
+            </div>
+
+            {% for answer in question.answers.all %}
+              {% if answer.lawyer == request.user %}
+                <div class="existing-answer">
+                  <div class="answer-text" id="answer-{{ answer.id }}">
+                    {{ answer.answer_text }}
+                  </div>
+                  <div class="answer-actions">
+                    <button class="edit-btn" onclick="toggleEdit({{ answer.id }})">Edit</button>
+                    <form method="post" action="{% url 'delete_answer' answer.id %}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this answer?')">
+                      {% csrf_token %}
+                      <button type="submit" class="delete-btn">Delete</button>
+                    </form>
+                  </div>
+                  
+                  <!-- Edit form (hidden by default) -->
+                  <form method="post" action="{% url 'edit_answer' answer.id %}" class="edit-form" id="edit-form-{{ answer.id }}" style="display: none;">
+                    {% csrf_token %}
+                    <textarea name="answer_text" id="edit-textarea-{{ answer.id }}">{{ answer.answer_text }}</textarea>
+                    <div class="edit-actions">
+                      <button type="submit" class="save-btn">Save</button>
+                      <button type="button" class="cancel-btn" onclick="toggleEdit({{ answer.id }})">Cancel</button>
+                    </div>
+                  </form>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% empty %}
+          <div class="no-questions">
+            <h3>No answers yet</h3>
+            <p>Start answering questions to help the community!</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Mobile menu toggle
+    const mobileToggle = document.querySelector('.mobile-toggle');
+    const navLinks = document.querySelector('.nav-links');
+
+    mobileToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+
+    function toggleEdit(answerId) {
+      const answerText = document.getElementById('answer-' + answerId);
+      const editForm = document.getElementById('edit-form-' + answerId);
+      
+      if (editForm.style.display === 'none') {
+        answerText.style.display = 'none';
+        editForm.style.display = 'block';
+      } else {
+        answerText.style.display = 'block';
+        editForm.style.display = 'none';
+      }
+    }
+
+    // Auto-hide messages after 5 seconds
+    setTimeout(() => {
+      const messages = document.querySelectorAll('.message');
+      messages.forEach(message => {
+        message.style.opacity = '0';
+        message.style.transform = 'translateY(-10px)';
+        message.style.transition = 'all 0.3s ease';
+        setTimeout(() => message.remove(), 300);
+      });
+    }, 5000);
+
+    // Auto-resize textareas
+    document.querySelectorAll('textarea').forEach(textarea => {
+      textarea.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = this.scrollHeight + 'px';
+      });
+    });
+  </script>
+</body>
+</html>

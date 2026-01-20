@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Legal Document Generator - AILA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * { 
+      box-sizing: border-box; 
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: #ffffff;
+      overflow-x: hidden;
+      background: #000000;
+      min-height: 100vh;
+      padding-top: 120px;
+    }
+
+    /* Advanced animated background */
+    .bg-effects {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .geometric-pattern {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 40% 70%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
+      animation: geometricShift 20s ease-in-out infinite;
+    }
+
+    @keyframes geometricShift {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      33% { transform: rotate(120deg) scale(1.1); }
+      66% { transform: rotate(240deg) scale(0.9); }
+    }
+
+    .floating-elements {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    .floating-element {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 50%;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { 
+        transform: translateY(0px) translateX(0px) scale(1);
+        opacity: 0.4;
+      }
+      25% { 
+        transform: translateY(-30px) translateX(15px) scale(1.2);
+        opacity: 0.8;
+      }
+      50% { 
+        transform: translateY(-60px) translateX(-15px) scale(0.8);
+        opacity: 0.6;
+      }
+      75% { 
+        transform: translateY(-30px) translateX(-30px) scale(1.1);
+        opacity: 0.9;
+      }
+    }
+
+    /* Premium Header */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(25px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      z-index: 1000;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    header.scrolled {
+      background: rgba(0, 0, 0, 0.95);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 6%;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .logo::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, #ffffff, transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover::after {
+      transform: scaleX(1);
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .nav-links li {
+      position: relative;
+    }
+
+    .nav-links a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      padding: 0.5rem 0;
+      display: block;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #ffffff, rgba(255, 255, 255, 0.7));
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a.active::after {
+      width: 100%;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    .header-right {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      margin-left: 2rem;
+    }
+
+    .welcome-text {
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 500;
+    }
+
+    .logout-btn {
+      background: #ffffff;
+      color: #000000;
+      padding: 0.8rem 2rem;
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      text-decoration: none;
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .logout-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .logout-btn:hover::before {
+      left: 100%;
+    }
+
+    .logout-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 25px 50px rgba(255, 255, 255, 0.2);
+    }
+
+    .mobile-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 4px;
+    }
+
+    .mobile-toggle span {
+      width: 25px;
+      height: 3px;
+      background: #ffffff;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    /* Main Container */
+    .main-container {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 2rem 6%;
+      min-height: calc(100vh - 140px);
+      position: relative;
+    }
+
+    .main-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    }
+
+    /* Page Header */
+    .page-header {
+      text-align: center;
+      margin-bottom: 4rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(45deg, rgba(255, 255, 255, 0.05), transparent);
+      border-radius: 50%;
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.1; }
+      50% { transform: translateX(-50%) scale(1.2); opacity: 0.2; }
+    }
+
+    .page-title {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 900;
+      color: #ffffff;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+      text-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
+      animation: fadeInUp 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .page-subtitle {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1.4rem;
+      margin-bottom: 2rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+      animation: fadeInUp 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(60px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Features Section */
+    .features-section {
+      margin-bottom: 3rem;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 3rem;
+      text-align: center;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #ffffff, rgba(255, 255, 255, 0.7));
+    }
+
+    .feature-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+      transition: left 0.8s ease;
+    }
+
+    .feature-card:hover::after {
+      left: 100%;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-15px);
+      box-shadow: 0 40px 80px rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+      color: #ffffff;
+    }
+
+    .feature-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .feature-desc {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    /* Documents Section */
+    .documents-section {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 3rem;
+      margin-bottom: 3rem;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .documents-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #ffffff, rgba(255, 255, 255, 0.7));
+    }
+
+    .documents-section::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+      transition: left 0.8s ease;
+    }
+
+    .documents-section:hover::after {
+      left: 100%;
+    }
+
+    .documents-section:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 40px 80px rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .section-subtitle {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1rem;
+    }
+
+    .document-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .doc-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 2rem;
+      color: #ffffff;
+      text-decoration: none;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .doc-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, #ffffff, rgba(255, 255, 255, 0.7));
+    }
+
+    .doc-btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+      transition: left 0.8s ease;
+    }
+
+    .doc-btn:hover::after {
+      left: 100%;
+    }
+
+    .doc-btn:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 60px rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .doc-icon {
+      font-size: 2.5rem;
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+    }
+
+    .doc-btn:hover .doc-icon {
+      transform: scale(1.1);
+    }
+
+    .doc-content {
+      flex: 1;
+    }
+
+    .doc-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #ffffff;
+    }
+
+    .doc-desc {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.9rem;
+    }
+
+    .doc-arrow {
+      font-size: 1.5rem;
+      opacity: 0.7;
+      transition: all 0.3s ease;
+    }
+
+    .doc-btn:hover .doc-arrow {
+      opacity: 1;
+      transform: translateX(5px);
+    }
+
+    /* How It Works Section */
+    .how-it-works {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 3rem;
+      margin-bottom: 3rem;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .how-it-works::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #ffffff, rgba(255, 255, 255, 0.7));
+    }
+
+    .how-it-works::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+      transition: left 0.8s ease;
+    }
+
+    .how-it-works:hover::after {
+      left: 100%;
+    }
+
+    .how-it-works:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 40px 80px rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .step-card {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .step-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+      transition: left 0.8s ease;
+    }
+
+    .step-card:hover::before {
+      left: 100%;
+    }
+
+    .step-card:hover {
+      transform: translateY(-8px);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 15px 40px rgba(255, 255, 255, 0.1);
+    }
+
+    .step-number {
+      display: inline-block;
+      width: 70px;
+      height: 70px;
+      background: #ffffff;
+      color: #000000;
+      border-radius: 50%;
+      font-size: 1.8rem;
+      font-weight: 900;
+      line-height: 70px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .step-card:hover .step-number {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 20px 50px rgba(255, 255, 255, 0.2);
+    }
+
+    .step-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .step-desc {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    /* Support Section */
+    .support-section {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 4rem 3rem;
+      text-align: center;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .support-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #ffffff, rgba(255, 255, 255, 0.7));
+    }
+
+    .support-section::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+      transition: left 0.8s ease;
+    }
+
+    .support-section:hover::after {
+      left: 100%;
+    }
+
+    .support-section:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 40px 80px rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .support-title {
+      font-size: 2.5rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+    }
+
+    .support-subtitle {
+      color: #ffffff;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+
+    .support-desc {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1.2rem;
+      margin-bottom: 2.5rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+    }
+
+    .contact-btn {
+      background: #ffffff;
+      color: #000000;
+      padding: 1.2rem 3rem;
+      border: none;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      text-decoration: none;
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .contact-btn:hover::before {
+      left: 100%;
+    }
+
+    .contact-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 25px 60px rgba(255, 255, 255, 0.3);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .main-container {
+        padding: 2rem 4%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        position: fixed;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(25px);
+        flex-direction: column;
+        padding: 2rem;
+        gap: 1rem;
+        transform: translateY(-100%);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .nav-links.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .mobile-toggle {
+        display: flex;
+      }
+
+      .header-right {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .welcome-text {
+        font-size: 0.8rem;
+      }
+
+      .main-container {
+        padding: 2rem 4%;
+      }
+
+      .page-title {
+        font-size: 2.5rem;
+      }
+
+      .section-title {
+        font-size: 1.5rem;
+      }
+
+      .document-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+      }
+
+      .doc-btn {
+        padding: 1.5rem;
+      }
+
+      .feature-card,
+      .step-card {
+        padding: 2rem;
+      }
+
+      .support-section {
+        padding: 3rem 2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .main-container {
+        padding: 1rem 3%;
+      }
+
+      .document-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .features-grid,
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .feature-card,
+      .step-card,
+      .doc-btn {
+        padding: 1.5rem;
+      }
+
+      .support-section {
+        padding: 2rem 1rem;
+      }
+    }
+
+    /* Smooth scrolling */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Premium selection styles */
+    ::selection {
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #000000;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+  </style>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Inter Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="bg-effects">
+    <div class="geometric-pattern"></div>
+    <div class="floating-elements">
+      <div class="floating-element" style="top: 10%; left: 10%; animation-delay: 0s;"></div>
+      <div class="floating-element" style="top: 20%; left: 80%; animation-delay: 2s;"></div>
+      <div class="floating-element" style="top: 60%; left: 20%; animation-delay: 4s;"></div>
+      <div class="floating-element" style="top: 80%; left: 70%; animation-delay: 6s;"></div>
+      <div class="floating-element" style="top: 30%; left: 50%; animation-delay: 1s;"></div>
+      <div class="floating-element" style="top: 70%; left: 90%; animation-delay: 3s;"></div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <nav>
+      <div class="logo">AILA</div>
+      <ul class="nav-links">
+               <li><a href="{% url 'user_dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'find_lawyer' %}">Find Lawyer</a></li>
+                <li><a href="{% url 'contacted_lawyers' %}">Contacted Lawyers</a></li>
+               <li><a href="{% url 'user_cases' %}">Case Status</a></li>
+                <li><a href="{% url 'doc' %}">Create Documents</a></li>
+                <li><a href="{% url 'chatbot' %}">Meet AI</a></li>
+      </ul>
+      <div class="header-right">
+        <span class="welcome-text">Welcome, {{ request.user.full_name }}</span>
+        <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+      </div>
+      <div class="mobile-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Container -->
+  <div class="main-container">
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="page-title">Create Legal Documents, Contracts, and Forms in Minutes</div>
+      <div class="page-subtitle">Customizable Legal Document Templates for Business, Real Estate, and More</div>
+    </div>
+
+    <!-- Documents Section -->
+    <div class="documents-section">
+      <div class="document-grid">
+        <a href="{% url 'lease' %}" class="doc-btn">
+          <div class="doc-icon">🏠</div>
+          <div class="doc-content">
+            <div class="doc-title">Lease Agreement</div>
+          </div>
+        </a>
+
+        <a href="{% url 'emp' %}" class="doc-btn">
+          <div class="doc-icon">📊</div>
+          <div class="doc-content">
+            <div class="doc-title">Employee Agreement</div>
+          </div>
+        </a>
+
+        <a href="{% url 'nda' %}" class="doc-btn">
+          <div class="doc-icon">🤐</div>
+          <div class="doc-content">
+            <div class="doc-title">Non-Disclosure Agreement</div>
+          </div>
+        </a>
+
+        <a href="{% url 'poa' %}" class="doc-btn">
+          <div class="doc-icon">⚖️</div>
+          <div class="doc-content">
+            <div class="doc-title">Power of Attorney</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="features-section">
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🏛️</div>
+          <div class="feature-title">Legal documents created by attorneys</div>
+          <div class="feature-desc">All templates are prepared by qualified legal professionals</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📋</div>
+          <div class="feature-title">Filled out forms, ready to be used</div>
+          <div class="feature-desc">Complete forms with guided questions and instant generation</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📄</div>
+          <div class="feature-title">Unlimited revisions and copies</div>
+          <div class="feature-desc">Make changes and download as many times as you need</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- How It Works Section -->
+    <div class="how-it-works">
+      <div class="section-header">
+        <div class="section-title">How It Works</div>
+        <div class="section-subtitle">Simple steps to create your legal documents</div>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <div class="step-title">Choose Your Legal Form</div>
+          <div class="step-desc">Browse our free online legal contracts & documents</div>
+        </div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <div class="step-title">Answer Simple Questions</div>
+          <div class="step-desc">Our contract will turn your answers into a customized legal form</div>
+        </div>
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <div class="step-title">Sign Your Document</div>
+          <div class="step-desc">Download and print your customized legal document</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Support Section -->
+    <div class="support-section">
+      <div class="support-title">Have Questions?</div>
+      <div class="support-subtitle">We're here to Help</div>
+      <div class="support-desc">
+        If you're having any difficulties with our document builder you can reach out to our Customer Support agents by phone, chat, or email.
+      </div>
+      <a href="#" class="contact-btn">Contact Us</a>
+    </div>
+  </div>
+
+  <script>
+    // Header scroll effect
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('header');
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // Mobile menu toggle
+    function mobileMenuToggle() {
+      const toggle = document.querySelector('.mobile-toggle');
+      const navLinks = document.querySelector('.nav-links');
+      
+      if (toggle && navLinks) {
+        toggle.addEventListener('click', () => {
+          navLinks.classList.toggle('active');
+        });
+      }
+    }
+
+    // Add floating elements animation delays
+    document.querySelectorAll('.floating-element').forEach((element, index) => {
+      element.style.animationDelay = `${index * 1.3}s`;
+    });
+
+    // Add card animation delays
+    document.querySelectorAll('.feature-card, .step-card, .doc-btn').forEach((card, index) => {
+      card.style.setProperty('--card-index', index);
+      card.style.animationDelay = `${index * 0.1}s`;
+    });
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+      mobileMenuToggle();
+    });
+  </script>
+</body>
+</html>

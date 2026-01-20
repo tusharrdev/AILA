@@ -1,0 +1,369 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Book Appointment</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* (Your existing CSS unchanged) */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(180deg, #2c3e50 0%, #34495e 50%, #22313f 100%);
+      color: #f0f0f0;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 16px;
+      padding: 2rem;
+      color: #2c3e50;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-weight: 700;
+    }
+    .slots-list {
+      background: #eef4ff;
+      padding: 1rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      color: #34495e;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+    .slots-list ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .slots-list li {
+      margin-bottom: 0.75rem;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      background: #d3e8ff;
+      transition: background-color 0.3s ease;
+    }
+    .slots-list li:hover {
+      background: #a7c9ff;
+    }
+    .slots-list li.selected {
+      background: #16a085;
+      color: white;
+      font-weight: 700;
+    }
+    .no-slots {
+      text-align: center;
+      color: #7f8c8d;
+      font-style: italic;
+      padding: 1rem;
+      cursor: default !important;
+    }
+    form label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    form input[type="datetime-local"] {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1.5rem;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+    }
+    form button {
+      background: linear-gradient(135deg, #16a085, #1abc9c);
+      color: #fff;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 10px;
+      width: 100%;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    form button:hover {
+      background: #13856d;
+    }
+    .info-text {
+      font-size: 0.9rem;
+      color: #7f8c8d;
+      margin-bottom: 1.5rem;
+    }
+    .error {
+      color: red;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    
+    /* Success/Error Messages */
+    .message-container {
+      margin-bottom: 1.5rem;
+    }
+    .message {
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+    }
+    .message.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .message.success {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+    .message.error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📅 Book an Appointment</h1>
+
+    <!-- Message Container -->
+    <div class="message-container" id="messageContainer"></div>
+
+    <div class="slots-list">
+      <p><strong>Select an Available Slot:</strong></p>
+      <ul id="slots">
+        {% for slot in slots %}
+          <li data-start="{{ slot.start_time|date:'Y-m-d\\TH:i' }}" data-end="{{ slot.end_time|date:'Y-m-d\\TH:i' }}">
+            {{ slot.start_time|date:"M d, Y g:i A" }} – {{ slot.end_time|date:"g:i A" }}
+          </li>
+        {% empty %}
+          <li class="no-slots">No slots available at the moment.</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <form method="post" id="bookingForm">
+      {% csrf_token %}
+      {{ form.appointment_datetime.label_tag }}
+      {{ form.appointment_datetime }}
+      <p class="info-text">* Select a slot above or manually enter a date/time within available hours.</p>
+      <button type="submit" disabled id="submitBtn">Confirm Booking</button>
+    </form>
+  </div>
+
+  <script>
+    const slotsContainer = document.getElementById('slots');
+    const appointmentInput = document.querySelector('input[type="datetime-local"]') || document.querySelector('input[name="appointment_datetime"]');
+    const submitBtn = document.getElementById('submitBtn');
+    const form = document.getElementById('bookingForm');
+    const messageContainer = document.getElementById('messageContainer');
+
+    function clearSelections() {
+      document.querySelectorAll('#slots li').forEach(s => s.classList.remove('selected'));
+    }
+
+    function enableSlotClick(li) {
+      li.addEventListener('click', () => {
+        clearSelections();
+        li.classList.add('selected');
+        appointmentInput.value = li.getAttribute('data-start');
+        submitBtn.disabled = false;
+      });
+    }
+
+    function showMessage(text, type = 'success') {
+      // Clear existing messages
+      messageContainer.innerHTML = '';
+      
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${type}`;
+      messageDiv.textContent = text;
+      
+      messageContainer.appendChild(messageDiv);
+      
+      // Trigger show animation
+      setTimeout(() => {
+        messageDiv.classList.add('show');
+      }, 10);
+      
+      // Auto-hide after 5 seconds
+      setTimeout(() => {
+        messageDiv.classList.remove('show');
+        setTimeout(() => {
+          if (messageContainer.contains(messageDiv)) {
+            messageContainer.removeChild(messageDiv);
+          }
+        }, 300);
+      }, 5000);
+    }
+
+    function checkAndShowNoSlots() {
+      const availableSlots = slotsContainer.querySelectorAll('li:not(.no-slots)');
+      const noSlotsMsg = slotsContainer.querySelector('.no-slots');
+      
+      if (availableSlots.length === 0 && !noSlotsMsg) {
+        const noSlotLi = document.createElement('li');
+        noSlotLi.className = 'no-slots';
+        noSlotLi.textContent = 'No slots available at the moment.';
+        slotsContainer.appendChild(noSlotLi);
+      } else if (availableSlots.length > 0 && noSlotsMsg) {
+        noSlotsMsg.remove();
+      }
+    }
+
+    // Initialize slot click events
+    document.querySelectorAll('#slots li').forEach(li => {
+      if (!li.classList.contains('no-slots')) {
+        enableSlotClick(li);
+      }
+    });
+
+    appointmentInput.addEventListener('input', () => {
+      clearSelections();
+      submitBtn.disabled = appointmentInput.value === '';
+    });
+
+    form.addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      const formData = new FormData(form);
+      const response = await fetch("", {
+        method: "POST",
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: formData
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        // Success - clear form and selections
+        submitBtn.disabled = true;
+        form.reset();
+        clearSelections();
+
+        // Show success message
+        showMessage('Appointment booked successfully!', 'success');
+
+        // Remove booked slot from list immediately on client-side
+        const bookedStart = appointmentInput.value;
+        const liToRemove = Array.from(slotsContainer.children).find(
+          li => li.getAttribute('data-start') === bookedStart
+        );
+        if (liToRemove) liToRemove.remove();
+
+        // Check if we need to show "no slots" message
+        checkAndShowNoSlots();
+      } else {
+        // Show error message
+        showMessage(result.error || "Booking failed. Please try again.", 'error');
+      }
+    });
+
+    // Normalize datetime string to YYYY-MM-DDTHH:mm for comparison
+    function normalizeDateTime(dtStr) {
+      const dt = new Date(dtStr);
+      if (isNaN(dt)) return dtStr; // fallback to raw string if invalid date
+      const year = dt.getFullYear();
+      const month = String(dt.getMonth() + 1).padStart(2, '0');
+      const day = String(dt.getDate()).padStart(2, '0');
+      const hours = String(dt.getHours()).padStart(2, '0');
+      const minutes = String(dt.getMinutes()).padStart(2, '0');
+      return `${year}-${month}-${day}T${hours}:${minutes}`;
+    }
+
+    // WebSocket connection (simplified without connection status)
+    const lawyerId = '{{ lawyer.id }}';
+    
+    function connectWebSocket() {
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const wsUrl = `${protocol}//${window.location.host}/ws/slots/${lawyerId}/`;
+      
+      const slotSocket = new WebSocket(wsUrl);
+
+      slotSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+
+        if (data.action === 'slot_added') {
+          const slot = data.slot;
+          const li = document.createElement('li');
+          li.setAttribute('data-start', normalizeDateTime(slot.start_time));
+          li.setAttribute('data-end', normalizeDateTime(slot.end_time));
+          li.textContent = slot.display;
+          enableSlotClick(li);
+          slotsContainer.appendChild(li);
+
+          // Check if we need to remove "no slots" message
+          checkAndShowNoSlots();
+
+        } else if (data.action === 'slot_booked') {
+          // Remove the booked slot from the list immediately
+          const slotStart = normalizeDateTime(data.slot.start_time);
+          
+          const liToRemove = Array.from(slotsContainer.children).find(
+            li => li.getAttribute('data-start') === slotStart
+          );
+
+          if (liToRemove) {
+            liToRemove.remove();
+            clearSelections();
+            submitBtn.disabled = true;
+            appointmentInput.value = '';
+          }
+
+          // Check if we need to show "no slots" message
+          checkAndShowNoSlots();
+
+        } else if (data.action === 'slot_deleted') {
+          const slotStart = normalizeDateTime(data.slot.start_time);
+          const liToRemove = Array.from(slotsContainer.children).find(
+            li => li.getAttribute('data-start') === slotStart
+          );
+
+          if (liToRemove) {
+            liToRemove.remove();
+            clearSelections();
+            submitBtn.disabled = true;
+            appointmentInput.value = '';
+          }
+
+          // Check if we need to show "no slots" message
+          checkAndShowNoSlots();
+        }
+      };
+
+      slotSocket.onclose = function(e) {
+        // Attempt to reconnect after 3 seconds (silently)
+        setTimeout(() => {
+          connectWebSocket();
+        }, 3000);
+      };
+
+      return slotSocket;
+    }
+
+    // Start the WebSocket connection
+    let slotSocket = connectWebSocket();
+
+    // Clean up WebSocket on page unload
+    window.addEventListener('beforeunload', function() {
+      if (slotSocket) {
+        slotSocket.close();
+      }
+    });
+
+    // Initial check for no slots
+    checkAndShowNoSlots();
+  </script>
+</body>
+</html>

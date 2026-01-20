@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AILA Dashboard - Lawyer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #64ffda;
+      --accent: #bb86fc;
+      --bg: #0a0a0a;
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --border: rgba(255, 255, 255, 0.1);
+      --text: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    aside {
+      width: 260px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      border-right: 1px solid var(--border);
+      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    nav a {
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      display: block;
+    }
+
+    nav a:hover, nav a.active {
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      color: #000;
+    }
+
+    main {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      background: linear-gradient(45deg, #ffffff, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      backdrop-filter: blur(20px);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(100, 255, 218, 0.15);
+    }
+
+    .card h3 {
+      font-size: 1.2rem;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .card p {
+      opacity: 0.85;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.8rem;
+      opacity: 0.5;
+    }
+
+    @media (max-width: 768px) {
+      aside {
+        display: none;
+      }
+
+      main {
+        padding: 1rem;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <aside>
+    <div class="logo">AILA</div>
+    <nav>
+      <a href="#" class="active">Dashboard</a>
+      <a href="#">My Cases</a>
+      <a href="#">Appointments</a>
+      <a href="#">Clients</a>
+      <a href="#">Documents</a>
+      <a href="#">Messages</a>
+      <a href="#">Settings</a>
+    </nav>
+  </aside>
+
+  <main>
+    <h1>Welcome back, Advocate Sharma 👩‍⚖️</h1>
+
+    <div class="grid">
+      <div class="card">
+        <h3>📁 Active Cases</h3>
+        <p>14 cases are currently being handled.</p>
+      </div>
+      <div class="card">
+        <h3>📅 Upcoming Appointments</h3>
+        <p>3 consultations scheduled this week.</p>
+      </div>
+      <div class="card">
+        <h3>📩 Messages</h3>
+        <p>You have 7 unread messages.</p>
+      </div>
+      <div class="card">
+        <h3>📊 Performance</h3>
+        <p>92% client satisfaction rate this quarter.</p>
+      </div>
+      <div class="card">
+        <h3>🔔 Notifications</h3>
+        <p>2 new document requests and 1 hearing update.</p>
+      </div>
+    </div>
+
+    <footer>© 2025 LegalAI - All rights reserved.</footer>
+  </main>
+
+</body>
+</html>

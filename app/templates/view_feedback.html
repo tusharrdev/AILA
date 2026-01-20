@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}User Feedback{% endblock %}
+
+{% block content %}
+<h2>Feedback</h2>
+
+<form method="GET" style="margin-bottom: 20px;">
+  <label for="type">Filter by:</label>
+  <select name="type" id="type" onchange="this.form.submit()">
+    <option value="" {% if not selected_type %}selected{% endif %}>All</option>
+    <option value="user" {% if selected_type == 'user' %}selected{% endif %}>User</option>
+    <option value="lawyer" {% if selected_type == 'lawyer' %}selected{% endif %}>Lawyer</option>
+  </select>
+</form>
+
+{% if feedbacks %}
+    <ul>
+        {% for fb in feedbacks %}
+            <li style="margin-bottom: 15px;">
+                <strong>{{ fb.user.full_name }} ({{ fb.user.email }})</strong><br>
+                <strong>Subject:</strong> {{ fb.subject }}<br>
+                <strong>Message:</strong> {{ fb.message }}<br>
+                <em>Submitted on: {{ fb.submitted_at|date:"M d, Y H:i" }}</em>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No feedback submitted yet.</p>
+{% endif %}
+
+<a href="{% url 'admin_dashboard' %}">← Back to Dashboard</a>
+{% endblock %}

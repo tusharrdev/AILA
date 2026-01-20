@@ -1,0 +1,1156 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Enhanced Legal ChatBot - Optimized</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ecf0f3, #e0eafc);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #333;
+        }
+
+        #chat-container {
+            width: 100%;
+            max-width: 900px;
+            height: 90vh;
+            background-color: #ffffff;
+            padding: 25px 20px;
+            border-radius: 16px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        h2 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+        }
+
+        .chat-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .mode-toggle, .action-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .mode-toggle {
+            background: #3498db;
+            color: white;
+        }
+
+        .mode-toggle:hover {
+            background: #2980b9;
+        }
+
+        .mode-toggle.active {
+            background: #27ae60;
+        }
+
+        .action-btn {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .action-btn:hover {
+            background: #c0392b;
+        }
+
+        .mode-indicator {
+            padding: 10px 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        #chat-box {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            background-color: #f9fbfc;
+            margin-bottom: 15px;
+            scroll-behavior: smooth;
+        }
+
+        .chat-msg {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            animation: fadeIn 0.3s ease-in forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .user-msg {
+            align-items: flex-end;
+        }
+
+        .bot-msg {
+            align-items: flex-start;
+        }
+
+        .chat-bubble {
+            padding: 12px 16px;
+            border-radius: 16px;
+            max-width: 85%;
+            font-size: 15px;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .user-msg .chat-bubble {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .bot-msg .chat-bubble {
+            background-color: #ecf0f1;
+            color: #34495e;
+            border-bottom-left-radius: 4px;
+        }
+
+        .document-upload-section {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .document-upload-section:hover {
+            border-color: #3498db;
+            background: #e3f2fd;
+        }
+
+        .upload-input {
+            display: none;
+        }
+
+        .upload-label {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .upload-label:hover {
+            background: #2980b9;
+        }
+
+        .upload-label.disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
+
+        .uploaded-file {
+            margin-top: 10px;
+            padding: 10px;
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            color: #155724;
+        }
+
+        .file-size-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .document-generation-section {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .generation-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .doc-type-btn {
+            padding: 8px 16px;
+            border: 2px solid #f39c12;
+            background: white;
+            color: #f39c12;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .doc-type-btn:hover, .doc-type-btn.active {
+            background: #f39c12;
+            color: white;
+        }
+
+        .doc-type-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #user-input-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        #user-input {
+            flex-grow: 1;
+            padding: 12px 16px;
+            font-size: 15px;
+            border-radius: 25px;
+            border: 2px solid #ddd;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        #user-input:focus {
+            border-color: #3498db;
+        }
+
+        #user-input:disabled {
+            background: #f5f5f5;
+            cursor: not-allowed;
+        }
+
+        #send-btn {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            min-width: 80px;
+        }
+
+        #send-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+        }
+
+        #send-btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #8e44ad, #9b59b6);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(142, 68, 173, 0.3);
+        }
+
+        #loading {
+            margin-top: 10px;
+            font-style: italic;
+            color: #888;
+            text-align: center;
+            display: none;
+        }
+
+        .loading-dots {
+            display: inline-block;
+        }
+
+        .loading-dots:after {
+            content: '';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
+        }
+
+        .question-form {
+            background: #e8f5e8;
+            border: 1px solid #c3e6cb;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border: 1px solid #f5c6cb;
+        }
+
+        .timeout-warning {
+            background: #fff3cd;
+            color: #856404;
+            padding: 8px 12px;
+            border-radius: 5px;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        .message-limit-warning {
+            background: #d1ecf1;
+            color: #0c5460;
+            padding: 8px 12px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            #chat-container {
+                padding: 20px;
+                height: 95vh;
+            }
+
+            .chat-controls {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .generation-options {
+                justify-content: center;
+            }
+
+            #user-input {
+                font-size: 14px;
+            }
+
+            #send-btn {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <div class="chat-header">
+            <h2>💬 Enhanced Legal ChatBot</h2>
+            <div class="chat-controls">
+                <button class="mode-toggle" id="generalMode" onclick="switchMode('general')">General Chat</button>
+                <button class="mode-toggle" id="documentMode" onclick="switchMode('document')">Document Q&A</button>
+                <button class="mode-toggle" id="generationMode" onclick="switchMode('generation')">Generate Document</button>
+                <button class="action-btn" onclick="clearChat()">Clear Chat</button>
+            </div>
+        </div>
+
+        <div class="mode-indicator" id="modeIndicator">
+            General Legal Chat Mode - Ask any legal questions
+        </div>
+
+        <!-- Document Upload Section -->
+        <div class="document-upload-section hidden" id="documentUploadSection">
+            <div class="upload-area">
+                <input type="file" id="documentInput" class="upload-input" accept=".pdf,.doc,.docx,.txt" onchange="handleFileUpload(event)">
+                <label for="documentInput" class="upload-label" id="uploadLabel">
+                    📁 Upload Document (PDF, DOC, DOCX, TXT) - Max 5MB
+                </label>
+                <div id="uploadedFile" class="uploaded-file hidden"></div>
+            </div>
+        </div>
+
+        <!-- Document Generation Section -->
+        <div class="document-generation-section hidden" id="documentGenerationSection">
+            <h4>Select Document Type to Generate:</h4>
+            <div class="generation-options">
+                <button class="doc-type-btn" onclick="startDocumentGeneration('contract')">Contract</button>
+                <button class="doc-type-btn" onclick="startDocumentGeneration('lease')">Lease Agreement</button>
+                <button class="doc-type-btn" onclick="startDocumentGeneration('nda')">NDA</button>
+                <button class="doc-type-btn" onclick="startDocumentGeneration('power_of_attorney')">Power of Attorney</button>
+                <button class="doc-type-btn" onclick="startDocumentGeneration('legal_notice')">Legal Notice</button>
+                <button class="doc-type-btn" onclick="startDocumentGeneration('will')">Will/Testament</button>
+            </div>
+            <div class="progress-bar hidden" id="progressBar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <div id="chat-box">
+            <div class="chat-msg bot-msg">
+                <div class="chat-bubble"><strong>Legal Bot:</strong> Hello! I'm your enhanced legal assistant. I can help you with:
+                    <br>• General legal questions
+                    <br>• Document analysis and Q&A
+                    <br>• Legal document generation
+                    <br><br>Choose a mode above to get started!</div>
+            </div>
+        </div>
+
+        <form id="chat-form">
+            {% csrf_token %}
+            <div id="user-input-container">
+                <input type="text" id="user-input" name="user_input" placeholder="Type your legal question..." required>
+                <button type="submit" id="send-btn">Send</button>
+            </div>
+        </form>
+
+        <div id="loading">
+            <span class="loading-dots">Thinking</span>
+        </div>
+    </div>
+
+    <script>
+        // Performance and State Management
+        let currentMode = 'general';
+        let uploadedDocument = null;
+        let isProcessing = false;
+        let requestQueue = [];
+        let messageCount = 0;
+        const MAX_MESSAGES = 100;
+        const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+        const REQUEST_TIMEOUT = 60000; // 60 seconds
+        
+        let documentGenerationState = {
+            type: null,
+            questions: [],
+            currentQuestion: 0,
+            answers: {},
+            inProgress: false
+        };
+
+        // Debounce utility for preventing rapid requests
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Request timeout handler
+        function createTimeoutPromise(ms) {
+            return new Promise((_, reject) => {
+                setTimeout(() => reject(new Error('Request timeout')), ms);
+            });
+        }
+
+        // Enhanced file validation
+        function validateFile(file) {
+            const errors = [];
+            
+            if (file.size > MAX_FILE_SIZE) {
+                errors.push(`File size (${(file.size / 1024 / 1024).toFixed(1)}MB) exceeds maximum allowed size (5MB)`);
+            }
+            
+            const allowedTypes = ['application/pdf', 'application/msword', 
+                                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                                'text/plain'];
+            
+            if (!allowedTypes.includes(file.type)) {
+                errors.push('File type not supported. Please use PDF, DOC, DOCX, or TXT files.');
+            }
+            
+            return errors;
+        }
+
+        function switchMode(mode) {
+            if (isProcessing) {
+                addMessage('bot', 'Please wait for the current operation to complete before switching modes.');
+                return;
+            }
+            
+            currentMode = mode;
+            
+            // Update button states
+            document.querySelectorAll('.mode-toggle').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(mode + 'Mode').classList.add('active');
+            
+            // Update sections
+            document.getElementById('documentUploadSection').classList.toggle('hidden', mode !== 'document');
+            document.getElementById('documentGenerationSection').classList.toggle('hidden', mode !== 'generation');
+            
+            // Update mode indicator
+            const indicators = {
+                general: "General Legal Chat Mode - Ask any legal questions",
+                document: "Document Q&A Mode - Upload a document and ask questions about it",
+                generation: "Document Generation Mode - Generate legal documents with guided assistance"
+            };
+            document.getElementById('modeIndicator').textContent = indicators[mode];
+            
+            // Update input placeholder
+            const placeholders = {
+                general: "Type your legal question...",
+                document: "Ask questions about your uploaded document...",
+                generation: "I'll guide you through document generation..."
+            };
+            document.getElementById('user-input').placeholder = placeholders[mode];
+        }
+
+        function handleFileUpload(event) {
+            if (isProcessing) {
+                addMessage('bot', 'Please wait for the current operation to complete.');
+                event.target.value = '';
+                return;
+            }
+
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const validationErrors = validateFile(file);
+            if (validationErrors.length > 0) {
+                const uploadedFileDiv = document.getElementById('uploadedFile');
+                uploadedFileDiv.innerHTML = `
+                    <div class="error-message">
+                        <strong>Upload Error:</strong><br>
+                        ${validationErrors.join('<br>')}
+                    </div>
+                `;
+                uploadedFileDiv.classList.remove('hidden');
+                event.target.value = '';
+                return;
+            }
+
+            uploadedDocument = file;
+            const sizeClass = file.size > 1024 * 1024 ? 'file-size-warning' : '';
+            const uploadedFileDiv = document.getElementById('uploadedFile');
+            uploadedFileDiv.innerHTML = `
+                <div class="${sizeClass}">
+                    <strong>Uploaded:</strong> ${file.name} (${(file.size / 1024).toFixed(1)} KB)
+                    <button onclick="removeDocument()" style="margin-left: 10px; padding: 2px 8px; background: #e74c3c; color: white; border: none; border-radius: 3px; cursor: pointer;">×</button>
+                </div>
+            `;
+            uploadedFileDiv.classList.remove('hidden');
+            
+            // Process the document with timeout
+            processDocumentWithTimeout(file);
+        }
+
+        function removeDocument() {
+            if (isProcessing) {
+                addMessage('bot', 'Cannot remove document while processing.');
+                return;
+            }
+            
+            uploadedDocument = null;
+            document.getElementById('uploadedFile').classList.add('hidden');
+            document.getElementById('documentInput').value = '';
+        }
+
+        async function processDocumentWithTimeout(file) {
+            setProcessingState(true);
+            
+            try {
+                const formData = new FormData();
+                formData.append('document', file);
+                formData.append('action', 'upload_document');
+                formData.append('csrfmiddlewaretoken', document.querySelector('[name="csrfmiddlewaretoken"]').value);
+
+                const response = await Promise.race([
+                    fetch("{% url 'chatbot' %}", {
+                        method: 'POST',
+                        body: formData
+                    }),
+                    createTimeoutPromise(REQUEST_TIMEOUT)
+                ]);
+
+                const result = await response.json();
+
+                if (result.success) {
+                    addMessage('bot', `Document "${file.name}" has been processed successfully! You can now ask questions about its content.`);
+                } else {
+                    addMessage('bot', `Error processing document: ${result.error || 'Unknown error'}`);
+                }
+            } catch (error) {
+                if (error.message === 'Request timeout') {
+                    addMessage('bot', `Document processing is taking longer than expected. Large files may require more time. Please try again or use a smaller file.`);
+                } else {
+                    addMessage('bot', `Error uploading document: ${error.message}`);
+                }
+            } finally {
+                setProcessingState(false);
+            }
+        }
+
+        function setProcessingState(processing) {
+            isProcessing = processing;
+            const sendBtn = document.getElementById('send-btn');
+            const userInput = document.getElementById('user-input');
+            const uploadLabel = document.getElementById('uploadLabel');
+            
+            if (processing) {
+                sendBtn.disabled = true;
+                sendBtn.textContent = 'Wait...';
+                userInput.disabled = true;
+                uploadLabel.classList.add('disabled');
+                showLoading();
+                
+                // Disable document generation buttons
+                document.querySelectorAll('.doc-type-btn').forEach(btn => {
+                    btn.disabled = true;
+                });
+            } else {
+                sendBtn.disabled = false;
+                sendBtn.textContent = 'Send';
+                userInput.disabled = false;
+                uploadLabel.classList.remove('disabled');
+                hideLoading();
+                
+                // Enable document generation buttons
+                document.querySelectorAll('.doc-type-btn').forEach(btn => {
+                    btn.disabled = false;
+                });
+            }
+        }
+
+        function startDocumentGeneration(docType) {
+            if (isProcessing) {
+                addMessage('bot', 'Please wait for the current operation to complete.');
+                return;
+            }
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.doc-type-btn').forEach(btn => btn.classList.remove('active'));
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            documentGenerationState = {
+                type: docType,
+                questions: getDocumentQuestions(docType),
+                currentQuestion: 0,
+                answers: {},
+                inProgress: true
+            };
+            
+            // Show progress bar
+            document.getElementById('progressBar').classList.remove('hidden');
+            updateProgress();
+            
+            // Start asking questions
+            askNextQuestion();
+        }
+
+        function getDocumentQuestions(docType) {
+            const questions = {
+                contract: [
+                    { key: 'party1_name', question: 'What is the name of the first party?', type: 'text' },
+                    { key: 'party2_name', question: 'What is the name of the second party?', type: 'text' },
+                    { key: 'contract_purpose', question: 'What is the purpose of this contract?', type: 'textarea' },
+                    { key: 'contract_amount', question: 'What is the contract amount (if applicable)?', type: 'text' },
+                    { key: 'start_date', question: 'What is the start date?', type: 'date' },
+                    { key: 'end_date', question: 'What is the end date?', type: 'date' },
+                    { key: 'terms', question: 'Any specific terms and conditions?', type: 'textarea' }
+                ],
+                lease: [
+                    { key: 'landlord_name', question: 'What is the landlord\'s full name?', type: 'text' },
+                    { key: 'tenant_name', question: 'What is the tenant\'s full name?', type: 'text' },
+                    { key: 'property_address', question: 'What is the complete property address?', type: 'textarea' },
+                    { key: 'monthly_rent', question: 'What is the monthly rent amount?', type: 'number' },
+                    { key: 'security_deposit', question: 'What is the security deposit amount?', type: 'number' },
+                    { key: 'lease_start', question: 'When does the lease start?', type: 'date' },
+                    { key: 'lease_duration', question: 'What is the lease duration (in months)?', type: 'number' },
+                    { key: 'special_terms', question: 'Any special terms or conditions?', type: 'textarea' }
+                ],
+                nda: [
+                    { key: 'disclosing_party', question: 'Name of the disclosing party:', type: 'text' },
+                    { key: 'receiving_party', question: 'Name of the receiving party:', type: 'text' },
+                    { key: 'confidential_info', question: 'Description of confidential information:', type: 'textarea' },
+                    { key: 'purpose', question: 'Purpose of disclosure:', type: 'textarea' },
+                    { key: 'duration', question: 'Duration of confidentiality (in years):', type: 'number' },
+                    { key: 'jurisdiction', question: 'Governing jurisdiction:', type: 'text' }
+                ],
+                power_of_attorney: [
+                    { key: 'principal_name', question: 'Principal\'s full name:', type: 'text' },
+                    { key: 'agent_name', question: 'Agent/Attorney-in-fact\'s full name:', type: 'text' },
+                    { key: 'powers_granted', question: 'What powers are being granted?', type: 'textarea' },
+                    { key: 'effective_date', question: 'Effective date:', type: 'date' },
+                    { key: 'duration_type', question: 'Is this durable or limited?', type: 'select', options: ['Durable', 'Limited'] },
+                    { key: 'limitations', question: 'Any limitations or restrictions?', type: 'textarea' }
+                ],
+                legal_notice: [
+                    { key: 'sender_name', question: 'Sender\'s name:', type: 'text' },
+                    { key: 'recipient_name', question: 'Recipient\'s name:', type: 'text' },
+                    { key: 'notice_subject', question: 'Subject of the notice:', type: 'text' },
+                    { key: 'violation_details', question: 'Details of the issue/violation:', type: 'textarea' },
+                    { key: 'remedy_sought', question: 'What remedy is being sought?', type: 'textarea' },
+                    { key: 'deadline', question: 'Response deadline:', type: 'date' }
+                ],
+                will: [
+                    { key: 'testator_name', question: 'Testator\'s full name:', type: 'text' },
+                    { key: 'executor_name', question: 'Executor\'s full name:', type: 'text' },
+                    { key: 'beneficiaries', question: 'List of beneficiaries and their shares:', type: 'textarea' },
+                    { key: 'assets_description', question: 'Description of assets to be distributed:', type: 'textarea' },
+                    { key: 'special_bequests', question: 'Any special bequests or instructions?', type: 'textarea' },
+                    { key: 'guardian_minor', question: 'Guardian for minor children (if applicable):', type: 'text' }
+                ]
+            };
+            return questions[docType] || [];
+        }
+
+        function askNextQuestion() {
+            if (documentGenerationState.currentQuestion < documentGenerationState.questions.length) {
+                const question = documentGenerationState.questions[documentGenerationState.currentQuestion];
+                showQuestionForm(question);
+            } else {
+                generateFinalDocument();
+            }
+        }
+
+        function showQuestionForm(question) {
+            const questionHtml = `
+                <div class="question-form" id="currentQuestionForm">
+                    <div class="form-group">
+                        <label>${question.question}</label>
+                        ${createInputField(question)}
+                    </div>
+                    <button type="button" onclick="submitAnswer()" style="background: #27ae60; color: white; padding: 8px 16px; border: none; border-radius: 5px; cursor: pointer;">Submit Answer</button>
+                    <button type="button" onclick="skipQuestion()" style="background: #95a5a6; color: white; padding: 8px 16px; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">Skip</button>
+                </div>
+            `;
+            
+            addMessage('bot', `Question ${documentGenerationState.currentQuestion + 1}/${documentGenerationState.questions.length}:<br>${questionHtml}`);
+        }
+
+        function createInputField(question) {
+            switch (question.type) {
+                case 'textarea':
+                    return `<textarea id="currentAnswer" placeholder="Enter your answer..."></textarea>`;
+                case 'number':
+                    return `<input type="number" id="currentAnswer" placeholder="Enter amount...">`;
+                case 'date':
+                    return `<input type="date" id="currentAnswer">`;
+                case 'select':
+                    const options = question.options.map(opt => `<option value="${opt}">${opt}</option>`).join('');
+                    return `<select id="currentAnswer"><option value="">Select...</option>${options}</select>`;
+                default:
+                    return `<input type="text" id="currentAnswer" placeholder="Enter your answer...">`;
+            }
+        }
+
+        function submitAnswer() {
+            const answer = document.getElementById('currentAnswer').value.trim();
+            const question = documentGenerationState.questions[documentGenerationState.currentQuestion];
+            
+            if (answer) {
+                documentGenerationState.answers[question.key] = answer;
+                addMessage('user', `${question.question} ${answer}`);
+                
+                // Remove the form
+                const form = document.getElementById('currentQuestionForm');
+                if (form) form.remove();
+                
+                documentGenerationState.currentQuestion++;
+                updateProgress();
+                askNextQuestion();
+            } else {
+                showError('Please provide an answer before submitting.');
+            }
+        }
+
+        function skipQuestion() {
+            const question = documentGenerationState.questions[documentGenerationState.currentQuestion];
+            addMessage('user', `${question.question} [Skipped]`);
+            
+            // Remove the form
+            const form = document.getElementById('currentQuestionForm');
+            if (form) form.remove();
+            
+            documentGenerationState.currentQuestion++;
+            updateProgress();
+            askNextQuestion();
+        }
+
+        function updateProgress() {
+            const progress = (documentGenerationState.currentQuestion / documentGenerationState.questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        async function generateFinalDocument() {
+            setProcessingState(true);
+            
+            try {
+                const response = await Promise.race([
+                    fetch("{% url 'chatbot' %}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams({
+                            'action': 'generate_document',
+                            'document_type': documentGenerationState.type,
+                            'answers': JSON.stringify(documentGenerationState.answers),
+                            'csrfmiddlewaretoken': document.querySelector('[name="csrfmiddlewaretoken"]').value
+                        })
+                    }),
+                    createTimeoutPromise(REQUEST_TIMEOUT)
+                ]);
+
+                const result = await response.json();
+
+                if (result.success) {
+                    addMessage('bot', `Document generated successfully! <br><br><button class="download-btn" onclick="downloadDocument('${result.document_id}')">📄 Download ${documentGenerationState.type.replace('_', ' ').toUpperCase()}</button>`);
+                    
+                    // Reset generation state
+                    documentGenerationState.inProgress = false;
+                    document.getElementById('progressBar').classList.add('hidden');
+                    document.querySelectorAll('.doc-type-btn').forEach(btn => btn.classList.remove('active'));
+                } else {
+                    addMessage('bot', `Error generating document: ${result.error}`);
+                }
+            } catch (error) {
+                if (error.message === 'Request timeout') {
+                    addMessage('bot', 'Document generation is taking longer than expected. Please try again.');
+                } else {
+                    addMessage('bot', `Error generating document: ${error.message}`);
+                }
+            } finally {
+                setProcessingState(false);
+            }
+        }
+
+        async function downloadDocument(documentId) {
+            try {
+                const response = await Promise.race([
+                    fetch(`{% url 'download_document' 'DOCUMENT_ID' %}`.replace('DOCUMENT_ID', documentId)),
+                    createTimeoutPromise(30000) // 30 second timeout for downloads
+                ]);
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${documentGenerationState.type}_${new Date().toISOString().split('T')[0]}.docx`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                } else {
+                    addMessage('bot', 'Error downloading document. Please try again.');
+                }
+            } catch (error) {
+                if (error.message === 'Request timeout') {
+                    addMessage('bot', 'Download timeout. Please try again.');
+                } else {
+                    addMessage('bot', `Download error: ${error.message}`);
+                }
+            }
+        }
+
+        // Optimized message management
+        function addMessage(type, content) {
+            const chatBox = document.getElementById('chat-box');
+            const messageClass = type === 'user' ? 'user-msg' : 'bot-msg';
+            const sender = type === 'user' ? 'You' : 'Legal Bot';
+            
+            // Create message element
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-msg ${messageClass}`;
+            messageDiv.innerHTML = `
+                <div class="chat-bubble"><strong>${sender}:</strong> ${content}</div>
+            `;
+            
+            // Add to chat
+            chatBox.appendChild(messageDiv);
+            messageCount++;
+            
+            // Manage message limit
+            if (messageCount > MAX_MESSAGES) {
+                const oldMessages = chatBox.querySelectorAll('.chat-msg');
+                if (oldMessages.length > MAX_MESSAGES) {
+                    // Remove oldest messages beyond limit
+                    for (let i = 0; i < oldMessages.length - MAX_MESSAGES; i++) {
+                        chatBox.removeChild(oldMessages[i]);
+                    }
+                    
+                    // Show warning about message limit
+                    if (messageCount === MAX_MESSAGES + 1) {
+                        const warningDiv = document.createElement('div');
+                        warningDiv.className = 'message-limit-warning';
+                        warningDiv.textContent = 'Chat history is being managed for optimal performance. Older messages have been removed.';
+                        chatBox.insertBefore(warningDiv, chatBox.firstChild);
+                    }
+                }
+            }
+            
+            // Smooth scroll to bottom
+            requestAnimationFrame(() => {
+                chatBox.scrollTop = chatBox.scrollHeight;
+            });
+        }
+
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = message;
+            
+            // Add to current question form if exists
+            const form = document.getElementById('currentQuestionForm');
+            if (form) {
+                form.appendChild(errorDiv);
+                setTimeout(() => errorDiv.remove(), 5000);
+            } else {
+                addMessage('bot', `<div class="error-message">${message}</div>`);
+            }
+        }
+
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        function clearChat() {
+            if (isProcessing) {
+                showError('Cannot clear chat while processing. Please wait.');
+                return;
+            }
+            
+            const chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML = `
+                <div class="chat-msg bot-msg">
+                    <div class="chat-bubble"><strong>Legal Bot:</strong> Chat cleared! How can I help you today?</div>
+                </div>
+            `;
+            
+            messageCount = 1; // Reset counter
+            
+            // Reset document generation state
+            documentGenerationState.inProgress = false;
+            document.getElementById('progressBar').classList.add('hidden');
+            document.querySelectorAll('.doc-type-btn').forEach(btn => btn.classList.remove('active'));
+        }
+
+        // Enhanced form submission with queue management
+        const debouncedSubmit = debounce(async function(userInput) {
+            if (isProcessing) {
+                requestQueue.push(userInput);
+                addMessage('bot', 'Your request has been queued. Please wait...');
+                return;
+            }
+
+            await processUserInput(userInput);
+            
+            // Process queued requests
+            if (requestQueue.length > 0) {
+                const nextInput = requestQueue.shift();
+                setTimeout(() => debouncedSubmit(nextInput), 1000);
+            }
+        }, 300);
+
+        async function processUserInput(userInput) {
+            // Don't process if in document generation mode and actively generating
+            if (currentMode === 'generation' && documentGenerationState.inProgress) {
+                addMessage('bot', "Please complete the current document generation process first.");
+                return;
+            }
+
+            setProcessingState(true);
+
+            try {
+                const formData = new FormData();
+                formData.append('user_input', userInput);
+                formData.append('mode', currentMode);
+                formData.append('csrfmiddlewaretoken', document.querySelector('[name="csrfmiddlewaretoken"]').value);
+                
+                if (currentMode === 'document' && uploadedDocument) {
+                    formData.append('has_document', 'true');
+                }
+
+                const response = await Promise.race([
+                    fetch("{% url 'chatbot' %}", {
+                        method: 'POST',
+                        body: formData
+                    }),
+                    createTimeoutPromise(REQUEST_TIMEOUT)
+                ]);
+
+                const result = await response.json();
+                addMessage('bot', result.answer || result.response || 'Sorry, I encountered an error. Please try again.');
+
+            } catch (error) {
+                if (error.message === 'Request timeout') {
+                    addMessage('bot', "The request is taking longer than expected. This might be due to complex processing or server load. Please try again.");
+                } else {
+                    console.error("Error:", error);
+                    addMessage('bot', "Sorry, I'm experiencing technical difficulties. Please try again later.");
+                }
+            } finally {
+                setProcessingState(false);
+            }
+        }
+
+        // Enhanced form submission
+        document.getElementById('chat-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const userInputEl = document.getElementById('user-input');
+            const userInput = userInputEl.value.trim();
+
+            if (!userInput) return;
+
+            addMessage('user', userInput);
+            userInputEl.value = '';
+            
+            debouncedSubmit(userInput);
+        });
+
+        // Handle Enter key
+        document.getElementById('user-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                document.getElementById('chat-form').dispatchEvent(new Event('submit'));
+            }
+        });
+
+        // Connection monitoring
+        let connectionRetries = 0;
+        const maxRetries = 3;
+
+        function monitorConnection() {
+            if (!navigator.onLine) {
+                addMessage('bot', '<div class="error-message">You appear to be offline. Please check your internet connection.</div>');
+            }
+        }
+
+        window.addEventListener('online', () => {
+            addMessage('bot', '<div style="background: #d4edda; color: #155724; padding: 8px 12px; border-radius: 5px;">Connection restored!</div>');
+            connectionRetries = 0;
+        });
+
+        window.addEventListener('offline', monitorConnection);
+
+        // Performance monitoring
+        function logPerformance(operation, startTime) {
+            const duration = Date.now() - startTime;
+            if (duration > 5000) { // Log slow operations
+                console.warn(`Slow operation detected: ${operation} took ${duration}ms`);
+                
+                if (duration > 30000) {
+                    addMessage('bot', '<div class="timeout-warning">This operation is taking longer than usual. Please be patient or try refreshing the page.</div>');
+                }
+            }
+        }
+
+        // Initialize with general mode
+        switchMode('general');
+
+        // Add performance observers if supported
+        if ('PerformanceObserver' in window) {
+            const observer = new PerformanceObserver((list) => {
+                for (const entry of list.getEntries()) {
+                    if (entry.duration > 1000) {
+                        console.warn(`Long task detected: ${entry.duration}ms`);
+                    }
+                }
+            });
+            observer.observe({entryTypes: ['longtask']});
+        }
+    </script>
+</body>
+</html>

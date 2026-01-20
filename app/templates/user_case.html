@@ -1,0 +1,854 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Cases - Client Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: #ffffff;
+      overflow-x: hidden;
+      background: #000000;
+      min-height: 100vh;
+    }
+
+    /* Advanced animated background */
+    .bg-effects {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .geometric-pattern {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 40% 70%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
+      animation: geometricShift 20s ease-in-out infinite;
+    }
+
+    @keyframes geometricShift {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      33% { transform: rotate(120deg) scale(1.1); }
+      66% { transform: rotate(240deg) scale(0.9); }
+    }
+
+    .floating-elements {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    .floating-element {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 50%;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { 
+        transform: translateY(0px) translateX(0px) scale(1);
+        opacity: 0.4;
+      }
+      25% { 
+        transform: translateY(-30px) translateX(15px) scale(1.2);
+        opacity: 0.8;
+      }
+      50% { 
+        transform: translateY(-60px) translateX(-15px) scale(0.8);
+        opacity: 0.6;
+      }
+      75% { 
+        transform: translateY(-30px) translateX(-30px) scale(1.1);
+        opacity: 0.9;
+      }
+    }
+
+    /* Premium Header */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(25px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      z-index: 1000;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    header.scrolled {
+      background: rgba(0, 0, 0, 0.95);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 6%;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+      position: relative;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .logo::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, #ffffff, transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover::after {
+      transform: scaleX(1);
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .nav-links li {
+      position: relative;
+    }
+
+    .nav-links a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      padding: 0.5rem 0;
+      display: block;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #ffffff, rgba(255, 255, 255, 0.7));
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-links a:hover {
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    .nav-links a.active {
+      color: #ffffff;
+    }
+
+    .nav-links a.active::after {
+      width: 100%;
+    }
+
+    /* Header right section */
+    .header-right {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      margin-left: 2rem;
+    }
+
+    .welcome-text {
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 500;
+    }
+
+    .logout-btn {
+      background: #ffffff;
+      color: #000000;
+      padding: 0.8rem 2rem;
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      text-decoration: none;
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .logout-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .logout-btn:hover::before {
+      left: 100%;
+    }
+
+    .logout-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 25px 50px rgba(255, 255, 255, 0.2);
+    }
+
+    /* Mobile menu */
+    .mobile-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 4px;
+    }
+
+    .mobile-toggle span {
+      width: 25px;
+      height: 3px;
+      background: #ffffff;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    /* Main content */
+    .main-content {
+      margin-top: 120px;
+      padding: 2rem 6%;
+      min-height: calc(100vh - 120px);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Heading style with underline */
+    h2 {
+      text-align: center;
+      color: #ffffff;
+      margin-bottom: 3rem;
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      position: relative;
+      text-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 2px;
+      background: #ffffff;
+    }
+
+    /* Grid layout for cases */
+    .case-list {
+      display: grid;
+      gap: 2rem;
+    }
+
+    /* 1 case: full width */
+    .case-list.one {
+      grid-template-columns: 1fr;
+    }
+
+    /* 2 cases: two equal columns */
+    .case-list.two {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* 3 cases: three equal columns */
+    .case-list.three {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* 4 or more: auto-fit with min 320px */
+    .case-list.more {
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    }
+
+    /* Case card styling */
+    .case-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 2rem;
+      position: relative;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+      color: #ffffff;
+    }
+
+    .case-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+      transition: left 0.8s ease;
+    }
+
+    .case-card:hover::before {
+      left: 100%;
+    }
+
+    .case-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 30px 60px rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Case Header */
+    .case-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1.5rem;
+      gap: 1rem;
+    }
+
+    .case-info {
+      flex: 1;
+    }
+
+    .case-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .delete-case-btn {
+      background: #ffffff;
+      color: #000000;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .delete-case-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .delete-case-btn:hover::before {
+      left: 100%;
+    }
+
+    .delete-case-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 35px rgba(255, 255, 255, 0.2);
+    }
+
+    /* Headings inside cards */
+    .case-card h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+    }
+
+    /* Lawyer Info Section */
+    .lawyer-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      padding: 1.2rem;
+      border-radius: 16px;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .lawyer-info:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .lawyer-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .lawyer-info:hover .lawyer-avatar {
+      border-color: #ffffff;
+      transform: scale(1.05);
+    }
+
+    .lawyer-placeholder {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 1.2rem;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .lawyer-info:hover .lawyer-placeholder {
+      border-color: #ffffff;
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.05);
+    }
+
+    .lawyer-details h4 {
+      color: #ffffff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+
+    .lawyer-details p {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    /* Paragraph styling */
+    .case-card p {
+      margin-bottom: 0.8rem;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .case-card p strong {
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    /* Status label style */
+    .status {
+      font-weight: 600;
+      padding: 0.4rem 1rem;
+      border-radius: 12px;
+      display: inline-block;
+      font-size: 0.9rem;
+      color: #000000;
+      text-transform: capitalize;
+      background: #ffffff;
+      transition: all 0.3s ease;
+    }
+
+    .status:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
+    }
+
+    /* Documents Section */
+    .documents-section {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .documents-section:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .documents-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .documents-header h4 {
+      color: #ffffff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .document-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      padding: 1rem;
+      border-radius: 12px;
+      margin-bottom: 0.8rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .document-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .document-info {
+      flex: 1;
+    }
+
+    .document-name {
+      color: #ffffff;
+      font-weight: 500;
+      margin-bottom: 0.3rem;
+      font-size: 0.95rem;
+    }
+
+    .document-date {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.85rem;
+    }
+
+    .document-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .doc-action-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0.6rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      color: #ffffff;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .doc-action-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+    }
+
+    /* No cases message styling */
+    .no-cases {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1.2rem;
+      padding: 4rem 2rem;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      margin: 2rem 0;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 1024px) {
+      nav {
+        padding: 1rem 4%;
+      }
+      
+      .main-content {
+        padding: 2rem 4%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      
+      .mobile-toggle {
+        display: flex;
+      }
+      
+      .header-right {
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-left: 1rem;
+      }
+
+      .welcome-text {
+        font-size: 0.8rem;
+      }
+
+      .logout-btn {
+        padding: 0.6rem 1.5rem;
+        font-size: 0.8rem;
+      }
+
+      .main-content {
+        margin-top: 100px;
+        padding: 1rem 4%;
+      }
+
+      /* For all case-list types on small screens, 1 column */
+      .case-list.one,
+      .case-list.two,
+      .case-list.three,
+      .case-list.more {
+        grid-template-columns: 1fr !important;
+      }
+
+      .case-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+
+      .lawyer-info {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.8rem;
+      }
+
+      .document-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.8rem;
+      }
+
+      .document-actions {
+        align-self: stretch;
+        justify-content: center;
+      }
+    }
+
+    /* Smooth scrolling */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Premium selection styles */
+    ::selection {
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #000000;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Animation for page load */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-on-load {
+      animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  </style>
+</head>
+<body>
+  <!-- Advanced animated background -->
+  <div class="bg-effects">
+    <div class="geometric-pattern"></div>
+    <div class="floating-elements" id="floating-elements"></div>
+  </div>
+
+  <!-- Header with Navigation -->
+  <header>
+    <nav>
+      <a href="{% url 'user_dashboard' %}" class="logo">AILA</a>
+      <ul class="nav-links">
+        <li><a href="{% url 'user_dashboard' %}">Dashboard</a></li>
+        <li><a href="{% url 'find_lawyer' %}">Find Lawyer</a></li>
+        <li><a href="{% url 'contacted_lawyers' %}">Contacted Lawyers</a></li>
+        <li><a href="{% url 'user_cases' %}" class="active">Case Status</a></li>
+        <li><a href="{% url 'doc' %}">Create Documents</a></li>
+        <li><a href="{% url 'chatbot' %}">Meet AI</a></li>
+      </ul>
+      <div class="header-right">
+        <span class="welcome-text">Welcome, {{ name }}</span>
+        <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+      </div>
+      <div class="mobile-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h2>📂 My Cases</h2>
+
+    {% if cases %}
+    <div class="case-list {% if cases|length == 1 %}one{% elif cases|length == 2 %}two{% elif cases|length == 3 %}three{% else %}more{% endif %}">
+      {% for case in cases %}
+      <div class="case-card">
+        <div class="case-header">
+          <div class="case-info">
+            <h3>{{ case.case_name }}</h3>
+          </div>
+        </div>
+
+        <!-- Lawyer Information -->
+        {% if case.lawyer %}
+        <div class="lawyer-info">
+          {% if case.lawyer.lawyerprofile.photo %}
+            <img src="{{ case.lawyer.lawyerprofile.photo.url }}" alt="{{ case.lawyer.full_name }}" class="lawyer-avatar">
+          {% else %}
+            <div class="lawyer-placeholder">
+              {{ case.lawyer.full_name|first|upper }}
+            </div>
+          {% endif %}
+          <div class="lawyer-details">
+            <h4>{{ case.lawyer.full_name }}</h4>
+            <p>Your assigned lawyer</p>
+          </div>
+        </div>
+        {% else %}
+        <div class="lawyer-info">
+          <div class="lawyer-placeholder">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="lawyer-details">
+            <h4>No Lawyer Assigned</h4>
+            <p>Waiting for assignment</p>
+          </div>
+        </div>
+        {% endif %}
+
+        <p><strong>Description:</strong> {{ case.description }}</p>
+        <p><strong>Status:</strong> 
+          <span class="status status-{{ case.status|slugify }}">{{ case.status }}</span>
+        </p>
+        <p><strong>Created:</strong> {{ case.created_at|date:"M d, Y" }}</p>
+
+        <!-- Documents Section -->
+        <div class="documents-section">
+          <div class="documents-header">
+            <h4><i class="fas fa-file-alt"></i> Case Documents</h4>
+          </div>
+          
+          <div class="documents-list">
+            {% for doc in case.documents.all %}
+            <div class="document-item">
+              <div class="document-info">
+                <div class="document-name">{{ doc.document_name }}</div>
+                <div class="document-date">Uploaded: {{ doc.uploaded_at|date:"M d, Y" }}</div>
+              </div>
+              <div class="document-actions">
+                <a href="{{ doc.document.url }}" target="_blank" class="doc-action-btn" title="Download">
+                  <i class="fas fa-download"></i>
+                </a>
+              </div>
+            </div>
+            {% empty %}
+            <p style="color: #7f8c8d; font-size: 0.9rem; text-align: center; margin: 0;">No documents uploaded yet.</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="no-cases">You have no active cases at the moment.</div>
+    {% endif %}
+  </div>
+  </script>
+</body>
+</html>

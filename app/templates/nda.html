@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NDA Agreement Generator</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .container:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: shimmer 4s ease-in-out infinite;
+    }
+    
+    @keyframes shimmer {
+      0%, 100% { transform: translateX(-100%) translateY(-100%) rotate(0deg); }
+      50% { transform: translateX(100%) translateY(100%) rotate(180deg); }
+    }
+    
+    .header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin: 0;
+      position: relative;
+      z-index: 1;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .form-section, .preview-section {
+      padding: 40px;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .form-section.hidden {
+      opacity: 0;
+      transform: translateY(-20px);
+      pointer-events: none;
+      position: absolute;
+      width: 100%;
+    }
+    
+    .preview-section {
+      display: none;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    
+    .preview-section.show {
+      display: block;
+      animation: slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .form-group, .form-row {
+      margin-bottom: 25px;
+      transition: all 0.3s ease;
+    }
+    
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+    
+    input, select, textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e1e5e9;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      background: rgba(255, 255, 255, 0.8);
+    }
+    
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .form-row {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .form-row .form-group {
+      flex: 1;
+    }
+    
+    .btn {
+      padding: 14px 28px;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 10px 5px;
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+    
+    .btn:hover::before {
+      left: 100%;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+    
+    .btn-success {
+      background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(86, 171, 47, 0.3);
+    }
+    
+    .btn-success:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(86, 171, 47, 0.4);
+    }
+    
+    .btn-secondary {
+      background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+    }
+    
+    .btn-secondary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(108, 117, 125, 0.4);
+    }
+    
+    .btn:disabled {
+      background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+      color: #6c757d;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .btn-center {
+      display: block;
+      margin: 30px auto;
+      width: fit-content;
+    }
+    
+    .preview-content {
+      background: white;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      max-height: 600px;
+      overflow-y: auto;
+      border: 1px solid #e1e5e9;
+      position: relative;
+    }
+    
+    .preview-content::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .preview-content::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    
+    .preview-content::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 10px;
+    }
+    
+    .preview-content h3 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+      font-size: 1.8rem;
+      font-weight: 700;
+      position: relative;
+      padding-bottom: 15px;
+    }
+    
+    .preview-content h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 2px;
+    }
+    
+    .editable-content {
+      line-height: 1.7;
+      font-size: 14px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-family: 'Times New Roman', serif;
+      color: #333;
+      transition: all 0.3s ease;
+    }
+    
+    .editable-content:focus {
+      outline: 2px solid #667eea;
+      outline-offset: 4px;
+      border-radius: 8px;
+    }
+    
+    .signature-section {
+      margin-top: 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding-top: 30px;
+      border-top: 2px solid #e1e5e9;
+    }
+    
+    .signature-block {
+      width: 45%;
+      text-align: center;
+    }
+    
+    .signature-line {
+      border-bottom: 2px solid #333;
+      height: 50px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    .signature-line:hover {
+      border-bottom-color: #667eea;
+    }
+    
+    .signature-label {
+      font-size: 13px;
+      margin-bottom: 20px;
+      font-weight: 600;
+      color: #666;
+    }
+    
+    .name-label {
+      font-size: 14px;
+      margin-top: 8px;
+      font-weight: 700;
+      color: #333;
+    }
+    
+    .preview-actions {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 30px;
+      border-top: 1px solid #e1e5e9;
+    }
+    
+    .edit-note {
+      background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+      border: 2px solid #ffc107;
+      color: #856404;
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      text-align: center;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(255, 193, 7, 0.2);
+    }
+    
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top: 2px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 10px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .success-message {
+      background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+      border: 2px solid #28a745;
+      color: #155724;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 15px;
+      text-align: center;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+    }
+    
+    .success-message.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    @media (max-width: 768px) {
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+      
+      .container {
+        margin: 10px;
+        border-radius: 15px;
+      }
+      
+      .header h1 {
+        font-size: 2rem;
+      }
+      
+      .form-section, .preview-section {
+        padding: 20px;
+      }
+      
+      .signature-section {
+        flex-direction: column;
+        gap: 40px;
+      }
+      
+      .signature-block {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🔒 NDA Agreement Generator</h1>
+    </div>
+    
+    <div class="form-section" id="formSection">
+      <form id="ndaForm">
+        <div class="form-group">
+          <label>Agreement Date</label>
+          <input type="date" id="agreementDate" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Disclosing Party Name</label>
+            <input type="text" id="disclosingParty" placeholder="Company or individual sharing information" required>
+          </div>
+          <div class="form-group">
+            <label>Receiving Party Name</label>
+            <input type="text" id="receivingParty" placeholder="Company or individual receiving information" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>NDA Type</label>
+          <select id="ndaType" required>
+            <option value="">Select NDA Type</option>
+            <option value="Unilateral">Unilateral (One-way)</option>
+            <option value="Mutual">Mutual (Two-way)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Purpose of Disclosure</label>
+          <textarea id="purpose" placeholder="e.g., Potential business partnership, employment discussions, product development collaboration" required></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Agreement Duration (Years)</label>
+            <input type="number" id="duration" placeholder="5" required>
+          </div>
+          <div class="form-group">
+            <label>Return Period (Days)</label>
+            <input type="number" id="returnPeriod" placeholder="30" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Governing State/Province</label>
+          <input type="text" id="governingLaw" placeholder="e.g., California, New York" required>
+        </div>
+
+        <div class="form-group">
+          <label>Jurisdiction for Disputes</label>
+          <input type="text" id="jurisdiction" placeholder="e.g., Courts of California" required>
+        </div>
+
+        <div class="form-group">
+          <label>Confidential Information Definition (Optional)</label>
+          <textarea id="confidentialInfo" placeholder="Specific types of information to be protected (leave blank for standard definition)"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Exceptions to Confidentiality (Optional)</label>
+          <textarea id="exceptions" placeholder="Any specific exceptions beyond standard legal exceptions"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Additional Terms (Optional)</label>
+          <textarea id="additionalTerms" placeholder="Any additional clauses or special conditions"></textarea>
+        </div>
+
+        <button type="button" class="btn btn-primary btn-center" onclick="generatePreview()">
+          📋 Generate Preview
+        </button>
+      </form>
+    </div>
+
+    <div class="preview-section" id="previewSection">
+      <div class="edit-note">
+        <strong>📝 Preview Mode:</strong> You can edit the document content below. Click and modify any text as needed before downloading.
+      </div>
+      
+      <div class="preview-content">
+        <h3>NON-DISCLOSURE AGREEMENT</h3>
+        <div id="editableContent" class="editable-content" contenteditable="true">
+          <!-- Generated content will appear here -->
+        </div>
+        <div class="signature-section">
+          <div class="signature-block">
+            <div class="signature-line"></div>
+            <div class="signature-label">Disclosing Party</div>
+            <div id="disclosingPartyDisplay" class="name-label">Disclosing Party</div>
+          </div>
+          <div class="signature-block">
+            <div class="signature-line"></div>
+            <div class="signature-label">Receiving Party</div>
+            <div id="receivingPartyDisplay" class="name-label">Receiving Party</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="preview-actions">
+        <button type="button" class="btn btn-secondary" onclick="backToForm()">
+          ← Back to Form
+        </button>
+        <button type="button" class="btn btn-success" onclick="downloadNDA()" id="downloadBtn">
+          📄 Download Word Document
+        </button>
+      </div>
+      <div id="successMessage" class="success-message">
+        ✅ Document downloaded successfully!
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function getValue(id) {
+      return document.getElementById(id).value || "";
+    }
+
+    function validateForm() {
+      const requiredFields = [
+        'agreementDate', 'disclosingParty', 'receivingParty', 'ndaType',
+        'purpose', 'duration', 'returnPeriod', 'governingLaw', 'jurisdiction'
+      ];
+      
+      for (let field of requiredFields) {
+        if (!getValue(field).trim()) {
+          const fieldName = field.replace(/([A-Z])/g, ' $1').toLowerCase();
+          alert(`Please fill in the ${fieldName}`);
+          return false;
+        }
+      }
+      return true;
+    }
+
+    function generateNDAContent() {
+      const isMutual = getValue("ndaType") === "Mutual";
+      const confidentialInfoSection = getValue("confidentialInfo").trim() 
+        ? getValue("confidentialInfo")
+        : 'any and all technical data, know-how, research, product plans, products, services, customers, customer lists, markets, software, developments, inventions, processes, formulas, technology, designs, drawings, engineering, hardware configuration information, marketing, finances, or other business information';
+
+      const exceptionsSection = getValue("exceptions").trim() 
+        ? `\n\nAdditional Exceptions: ${getValue("exceptions")}`
+        : '';
+
+      const additionalTermsSection = getValue("additionalTerms").trim() 
+        ? `\n\n8. Additional Terms. ${getValue("additionalTerms")}` 
+        : '';
+
+      const mutualLanguage = isMutual 
+        ? "This Agreement shall be mutual, meaning both parties may disclose and receive Confidential Information under the terms set forth herein. References to 'Disclosing Party' and 'Receiving Party' shall apply to either party when acting in the respective capacity."
+        : "This Agreement is unilateral, with only the Disclosing Party sharing Confidential Information with the Receiving Party.";
+
+      return `This Non-Disclosure Agreement (this "Agreement") is made effective as of ${getValue("agreementDate")}, by and between ${getValue("disclosingParty")} ("Disclosing Party") and ${getValue("receivingParty")} ("Receiving Party"). The Disclosing Party and Receiving Party may be referred to individually as a "Party" and collectively as the "Parties."
+
+RECITALS
+
+WHEREAS, the Parties wish to explore ${getValue("purpose")};
+
+WHEREAS, in connection with such discussions, the Disclosing Party may disclose certain confidential and proprietary information to the Receiving Party;
+
+WHEREAS, the Parties desire to maintain the confidentiality of such information;
+
+NOW, THEREFORE, in consideration of the mutual covenants contained herein and other good and valuable consideration, the receipt and sufficiency of which are hereby acknowledged, the Parties agree as follows:
+
+1. Confidential Information. For purposes of this Agreement, "Confidential Information" shall mean ${confidentialInfoSection}, disclosed by the Disclosing Party to the Receiving Party, whether orally, in writing, or in any other form, whether or not marked, designated, or otherwise identified as "confidential."
+
+${mutualLanguage}
+
+2. Obligations of Receiving Party. The Receiving Party agrees to:
+   a) Hold and maintain the Confidential Information in strict confidence;
+   b) Not disclose the Confidential Information to any third parties without the prior written consent of the Disclosing Party;
+   c) Not use the Confidential Information for any purpose other than evaluating potential business opportunities between the Parties;
+   d) Take reasonable precautions to protect the secrecy of and avoid disclosure or use of Confidential Information;
+   e) Limit access to Confidential Information to employees or agents who have a legitimate need to know and who have been informed of the confidential nature of such information.
+
+3. Exceptions. The obligations set forth in Section 2 shall not apply to any Confidential Information that:
+   a) Is or becomes publicly available through no breach of this Agreement by the Receiving Party;
+   b) Is rightfully received by the Receiving Party from a third party without breach of any confidentiality obligation;
+   c) Is independently developed by the Receiving Party without use of or reference to the Confidential Information;
+   d) Was known by the Receiving Party prior to disclosure by the Disclosing Party;
+   e) Is required to be disclosed by law, regulation, or court order, provided that the Receiving Party gives the Disclosing Party reasonable advance notice of such required disclosure.${exceptionsSection}
+
+4. Return of Materials. Upon termination of discussions between the Parties or upon written request by the Disclosing Party, the Receiving Party shall promptly return or destroy all documents, materials, and other tangible items containing or representing Confidential Information and all copies thereof within ${getValue("returnPeriod")} days.
+
+5. Term. This Agreement shall remain in effect for a period of ${getValue("duration")} years from the date first written above, unless earlier terminated by mutual written consent of the Parties or extended by mutual written agreement.
+
+6. Remedies. The Receiving Party acknowledges that any breach of this Agreement may cause irreparable harm to the Disclosing Party, for which monetary damages may be inadequate. Therefore, the Disclosing Party shall be entitled to seek equitable relief, including injunction and specific performance, without prejudice to any other rights or remedies it may have at law or in equity.
+
+7. Governing Law and Jurisdiction. This Agreement shall be governed by and construed in accordance with the laws of ${getValue("governingLaw")}, without regard to conflict of law principles. Any disputes arising under this Agreement shall be subject to the exclusive jurisdiction of the ${getValue("jurisdiction")}.${additionalTermsSection}
+
+9. Entire Agreement. This Agreement constitutes the entire agreement between the Parties with respect to the subject matter hereof and supersedes all prior negotiations, representations, or agreements relating to such subject matter. This Agreement may only be amended by a written instrument signed by both Parties.
+
+10. Severability. If any provision of this Agreement is held to be invalid, illegal, or unenforceable, the remaining provisions shall continue in full force and effect.
+
+11. Survival. The obligations of the Receiving Party under this Agreement shall survive termination of this Agreement and shall continue for the duration specified in Section 5.
+
+IN WITNESS WHEREOF, the Parties have executed this Agreement as of the date first written above.`;
+    }
+
+    function generatePreview() {
+      if (!validateForm()) {
+        return;
+      }
+
+      const content = generateNDAContent();
+      document.getElementById('editableContent').textContent = content;
+      
+      // Update signature names
+      document.getElementById('disclosingPartyDisplay').textContent = getValue("disclosingParty");
+      document.getElementById('receivingPartyDisplay').textContent = getValue("receivingParty");
+      
+      // Hide form and show preview with animation
+      document.getElementById('formSection').classList.add('hidden');
+      const previewSection = document.getElementById('previewSection');
+      previewSection.style.display = 'block';
+      
+      // Trigger animation
+      setTimeout(() => {
+        previewSection.classList.add('show');
+      }, 100);
+      
+      // Scroll to top of preview
+      setTimeout(() => {
+        previewSection.scrollIntoView({ behavior: 'smooth' });
+      }, 300);
+    }
+
+    function backToForm() {
+      // Hide preview and show form with animation
+      const previewSection = document.getElementById('previewSection');
+      previewSection.classList.remove('show');
+      
+      setTimeout(() => {
+        previewSection.style.display = 'none';
+        document.getElementById('formSection').classList.remove('hidden');
+        
+        // Scroll to top of form
+        document.getElementById('formSection').scrollIntoView({ behavior: 'smooth' });
+      }, 300);
+    }
+
+    function downloadNDA() {
+      const downloadBtn = document.getElementById('downloadBtn');
+      const successMessage = document.getElementById('successMessage');
+      
+      // Show loading state
+      downloadBtn.innerHTML = '📄 Generating Document<span class="loading"></span>';
+      downloadBtn.disabled = true;
+      
+      // Get the content from the editable div
+      const editableElement = document.getElementById('editableContent');
+      let content = '';
+      
+      // Check if content has been edited (HTML) or is original (text)
+      if (editableElement.innerHTML.includes('<div>') || editableElement.innerHTML.includes('<br>')) {
+        // Content has been edited, convert HTML to plain text with proper line breaks
+        content = editableElement.innerHTML
+          .replace(/<div>/g, '\n')
+          .replace(/<\/div>/g, '')
+          .replace(/<br\s*\/?>/g, '\n')
+          .replace(/<[^>]*>/g, '') // Remove any other HTML tags
+          .replace(/&nbsp;/g, ' ')
+          .replace(/&amp;/g, '&')
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
+          .replace(/&quot;/g, '"');
+      } else {
+        // Use original text content
+        content = editableElement.textContent || editableElement.innerText;
+      }
+      
+      if (!content.trim()) {
+        alert('No content to download!');
+        downloadBtn.innerHTML = '📄 Download Word Document';
+        downloadBtn.disabled = false;
+        return;
+      }
+      
+      try {
+        // Split content into paragraphs for proper formatting
+        const paragraphs = content.split('\n\n').filter(p => p.trim());
+        
+        // Create RTF content for Word compatibility
+        const rtfContent = `{\\rtf1\\ansi\\deff0 {\\fonttbl {\\f0 Times New Roman;}}
+\\f0\\fs24
+{\\qc\\b\\ul NON-DISCLOSURE AGREEMENT\\par}
+\\par
+${paragraphs.map(p => p.trim() ? `{\\pard\\qj ${p.trim().replace(/\n/g, '\\line ')}\\par}\\par` : '').join('')}
+\\par
+\\par
+
+{\\trowd\\trgaph180\\cellx4320\\cellx8640
+\\pard\\intbl\\qc\\sb360
+{\\ul _________________________________} \\line
+{\\fs20 Disclosing Party}\\line
+{\\b\\fs22 ${getValue("disclosingParty")}}\\line
+{\\fs20 Party Name}\\cell
+\\pard\\intbl\\qc\\sb360
+{\\ul _________________________________} \\line
+{\\fs20 Receiving Party}\\line
+{\\b\\fs22 ${getValue("receivingParty")}}\\line
+{\\fs20 Party Name}\\cell
+\\row}
+
+}`;
+
+        // Generate filename
+        const filename = `NDA_Agreement_${getValue("disclosingParty").replace(/\s+/g, '_')}_${getValue("receivingParty").replace(/\s+/g, '_')}.rtf`;
+        
+        // Create blob with RTF MIME type
+        const blob = new Blob([rtfContent], { 
+            type: 'application/rtf'
+        });
+        
+        // Create download link and trigger automatic download
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = filename;
+        
+        // Ensure download attribute is respected
+        a.setAttribute('download', filename);
+        
+        document.body.appendChild(a);
+        
+        // Force download without dialog
+        setTimeout(() => {
+          a.click();
+          
+          // Clean up
+          setTimeout(() => {
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+          }, 100);
+        }, 100);
+        
+        // Show success message
+        setTimeout(() => {
+          downloadBtn.innerHTML = '📄 Download Word Document';
+          downloadBtn.disabled = false;
+          successMessage.classList.add('show');
+          
+          // Hide success message after 3 seconds
+          setTimeout(() => {
+            successMessage.classList.remove('show');
+          }, 3000);
+        }, 1000);
+        
+      } catch (error) {
+        console.error('Error generating document:', error);
+        alert('There was an error generating the document. Please try again.');
+        downloadBtn.innerHTML = '📄 Download Word Document';
+        downloadBtn.disabled = false;
+      }
+    }
+
+    // Set today's date as default for agreement date
+    document.addEventListener('DOMContentLoaded', function() {
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('agreementDate').value = today;
+      
+      // Add smooth focus animations
+      const inputs = document.querySelectorAll('input, select, textarea');
+      inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+          this.parentElement.style.transform = 'translateY(-2px)';
+        });
+        
+        input.addEventListener('blur', function() {
+          this.parentElement.style.transform = 'translateY(0)';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Submit Feedback</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-color: #f4f6f8;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            color: #333;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 30px auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        form p {
+            margin-bottom: 15px;
+        }
+        form label {
+            font-weight: bold;
+        }
+        form input[type="text"],
+        form textarea,
+        form select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        .submit-btn {
+            background-color: #2980b9;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .submit-btn:hover {
+            background-color: #3498db;
+        }
+        #form-message {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Submit Feedback</h2>
+        <form method="POST" id="feedback-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+        <div id="form-message" style="display:none;"></div>
+    </div>
+
+    <script>
+        document.getElementById("feedback-form").addEventListener("submit", function (e) {
+            const messageDiv = document.getElementById("form-message");
+            const formInputs = this.querySelectorAll("input, textarea, select");
+
+            let isValid = true;
+            formInputs.forEach(input => {
+                if (input.required && !input.value.trim()) {
+                    isValid = false;
+                    input.style.borderColor = "red";
+                } else {
+                    input.style.borderColor = "#ccc";
+                }
+            });
+
+            if (!isValid) {
+                e.preventDefault();
+                messageDiv.textContent = "Please fill out all required fields.";
+                messageDiv.style.display = "block";
+                messageDiv.style.color = "red";
+            } else {
+                messageDiv.style.display = "none";
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,952 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Find a Lawyer - AILA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: #ffffff;
+      overflow-x: hidden;
+      background: #000000;
+      min-height: 100vh;
+    }
+
+    /* Advanced animated background */
+    .bg-effects {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .geometric-pattern {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 40% 70%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
+      animation: geometricShift 20s ease-in-out infinite;
+    }
+
+    @keyframes geometricShift {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      33% { transform: rotate(120deg) scale(1.1); }
+      66% { transform: rotate(240deg) scale(0.9); }
+    }
+
+    .floating-elements {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    .floating-element {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 50%;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { 
+        transform: translateY(0px) translateX(0px) scale(1);
+        opacity: 0.4;
+      }
+      25% { 
+        transform: translateY(-30px) translateX(15px) scale(1.2);
+        opacity: 0.8;
+      }
+      50% { 
+        transform: translateY(-60px) translateX(-15px) scale(0.8);
+        opacity: 0.6;
+      }
+      75% { 
+        transform: translateY(-30px) translateX(-30px) scale(1.1);
+        opacity: 0.9;
+      }
+    }
+
+    /* Premium Header */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(25px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      z-index: 1000;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    header.scrolled {
+      background: rgba(0, 0, 0, 0.95);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 6%;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+      position: relative;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .logo::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, #ffffff, transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover::after {
+      transform: scaleX(1);
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .nav-links li {
+      position: relative;
+    }
+
+    .nav-links a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      padding: 0.5rem 0;
+      display: block;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #ffffff, rgba(255, 255, 255, 0.7));
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-links a:hover {
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    .nav-links a.active {
+      color: #ffffff;
+    }
+
+    .nav-links a.active::after {
+      width: 100%;
+    }
+
+    /* Header right section */
+    .header-right {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      margin-left: 2rem;
+    }
+
+    .welcome-text {
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 500;
+    }
+
+    .logout-btn {
+      background: #ffffff;
+      color: #000000;
+      padding: 0.8rem 2rem;
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      text-decoration: none;
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .logout-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .logout-btn:hover::before {
+      left: 100%;
+    }
+
+    .logout-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 25px 50px rgba(255, 255, 255, 0.2);
+    }
+
+    /* Mobile menu */
+    .mobile-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 4px;
+    }
+
+    .mobile-toggle span {
+      width: 25px;
+      height: 3px;
+      background: #ffffff;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    /* Main content */
+    .main-content {
+      margin-top: 120px;
+      padding: 2rem 8%; /* INCREASED FROM 6% TO 8% */
+      min-height: calc(100vh - 120px);
+    }
+
+    h2 {
+      text-align: center;
+      color: #ffffff;
+      margin-bottom: 3rem;
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      position: relative;
+      text-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 2px;
+      background: #ffffff;
+    }
+
+    .filter-bar {
+      position: sticky;
+      top: 120px;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 1.5rem; /* REDUCED FROM 2rem TO 1.5rem */
+      margin-bottom: 3rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem; /* REDUCED FROM 1.5rem TO 1rem */
+      justify-content: center;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .filter-bar:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .filter-bar select,
+    .filter-bar input {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 0.7rem 0.8rem; /* REDUCED FROM 0.8rem 1rem */
+      font-size: 0.85rem; /* REDUCED FROM 0.9rem */
+      color: #ffffff;
+      min-width: 140px; /* REDUCED FROM 180px TO 140px */
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(10px);
+    }
+
+    .filter-bar select:focus,
+    .filter-bar input:focus {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);
+    }
+
+    .filter-bar select option {
+      background: #000000;
+      color: #ffffff;
+    }
+
+    .filter-bar input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .apply-btn, .reset-btn {
+      background: #ffffff;
+      color: #000000;
+      padding: 0.7rem 1.5rem; /* REDUCED FROM 0.8rem 2rem */
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.85rem; /* REDUCED FROM 0.9rem */
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .reset-btn {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .apply-btn:hover, .reset-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(255, 255, 255, 0.2);
+    }
+
+    .reset-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .lawyer-list {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .lawyer-card-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .lawyer-card {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 2rem;
+      position: relative;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+    }
+
+    .lawyer-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+      transition: left 0.8s ease;
+    }
+
+    .lawyer-card:hover::before {
+      left: 100%;
+    }
+
+    .lawyer-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 30px 60px rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .lawyer-photo {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 3px solid rgba(255, 255, 255, 0.2);
+      margin-right: 2rem;
+      transition: all 0.4s ease;
+      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+    }
+
+    .lawyer-card:hover .lawyer-photo {
+      border-color: #ffffff;
+      transform: scale(1.05);
+      box-shadow: 0 15px 40px rgba(255, 255, 255, 0.2);
+    }
+
+    .lawyer-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      transition: all 0.4s ease;
+    }
+
+    .lawyer-card:hover .lawyer-photo img {
+      transform: scale(1.1);
+    }
+
+    .lawyer-info {
+      flex: 1;
+      color: #ffffff;
+    }
+
+    .lawyer-info h5 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.8rem;
+      letter-spacing: -0.01em;
+    }
+
+    .lawyer-info p {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.6;
+    }
+
+    .rating-display {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.8rem;
+    }
+
+    .stars {
+      color: #f1c40f;
+      font-size: 1.2rem;
+      text-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
+      transition: all 0.3s ease;
+    }
+
+    .lawyer-card:hover .stars {
+      text-shadow: 0 0 15px rgba(241, 196, 15, 0.8);
+      transform: scale(1.1);
+    }
+
+    .rating-text {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 500;
+    }
+
+    .hire-btn {
+      background: #ffffff;
+      color: #000000;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 16px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      margin-left: auto;
+      position: relative;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .hire-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .hire-btn:hover::before {
+      left: 100%;
+    }
+
+    .hire-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 40px rgba(255, 255, 255, 0.3);
+    }
+
+    .no-lawyers, .no-lawyers-filtered {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1.2rem;
+      padding: 4rem 2rem;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      margin: 2rem 0;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 1024px) {
+      nav {
+        padding: 1rem 4%;
+      }
+      
+      .main-content {
+        padding: 2rem 6%; /* ADJUSTED FOR TABLETS */
+      }
+      
+      .filter-bar {
+        padding: 1.2rem;
+        gap: 0.8rem;
+      }
+      
+      .filter-bar select,
+      .filter-bar input {
+        min-width: 120px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      
+      .mobile-toggle {
+        display: flex;
+      }
+      
+      .header-right {
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-left: 1rem;
+      }
+
+      .welcome-text {
+        font-size: 0.8rem;
+      }
+
+      .logout-btn {
+        padding: 0.6rem 1.5rem;
+        font-size: 0.8rem;
+      }
+
+      .main-content {
+        margin-top: 100px;
+        padding: 1rem 4%;
+      }
+
+      .filter-bar {
+        top: 100px;
+        padding: 1rem;
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .filter-bar select,
+      .filter-bar input {
+        min-width: auto;
+        width: 100%;
+      }
+
+      .lawyer-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 1.5rem;
+      }
+
+      .lawyer-photo {
+        margin-right: 0;
+        margin-bottom: 1.5rem;
+        width: 80px;
+        height: 80px;
+      }
+
+      .hire-btn {
+        margin: 1.5rem 0 0;
+        margin-left: 0;
+        width: 100%;
+        text-align: center;
+      }
+
+      h2 {
+        margin-bottom: 2rem;
+      }
+    }
+
+    /* Smooth scrolling */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Premium selection styles */
+    ::selection {
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #000000;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Animation for page load */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-on-load {
+      animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  </style>
+</head>
+<body>
+  <!-- Advanced animated background -->
+  <div class="bg-effects">
+    <div class="geometric-pattern"></div>
+    <div class="floating-elements" id="floating-elements"></div>
+  </div>
+
+  <!-- Header with Navigation -->
+  <header>
+    <nav>
+      <a href="{% url 'user_dashboard' %}" class="logo">AILA</a>
+      <ul class="nav-links">
+        <li><a href="{% url 'user_dashboard' %}">Dashboard</a></li>
+        <li><a href="{% url 'find_lawyer' %}" class="active">Find Lawyer</a></li>
+        <li><a href="{% url 'contacted_lawyers' %}">Contacted Lawyers</a></li>
+        <li><a href="{% url 'user_cases' %}">Case Status</a></li>
+        <li><a href="{% url 'doc' %}">Create Documents</a></li>
+        <li><a href="{% url 'chatbot' %}">Meet AI</a></li>
+      </ul>
+      <div class="header-right">
+        <span class="welcome-text">Welcome, {{ name }}</span>
+        <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+      </div>
+      <div class="mobile-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h2 class="animate-on-load">Find a Lawyer</h2>
+
+    <!-- Filter Bar -->
+    <form method="GET" class="filter-bar animate-on-load">
+      <select name="case_type">
+        <option value="">Select Case Type</option>
+        <option>Anticipatory Bail</option>
+        <option>Arbitration</option>
+        <option>Armed Forces Tribunal</option>
+        <option>Banking / Finance</option>
+        <option>Bankruptcy / Insolvency</option>
+        <option>Breach of Contract</option>
+        <option>Cheque Bounce</option>
+        <option>Child Custody</option>
+        <option>Civil</option>
+        <option>Consumer Court</option>
+        <option>Corporate</option>
+        <option>Court Marriage</option>
+        <option>Criminal</option>
+        <option>Customs &amp; Central Excise</option>
+        <option>Cyber Crime</option>
+        <option>Divorce</option>
+        <option>Documentation</option>
+        <option>Domestic Violence</option>
+        <option>Dowry Case</option>
+        <option>Family</option>
+        <option>GST</option>
+        <option>High Court</option>
+        <option>Immigration</option>
+        <option>Insurance</option>
+        <option>International Law</option>
+        <option>Labour &amp; Service</option>
+        <option>Landlord/Tenant</option>
+        <option>Litigation</option>
+        <option>Media and Entertainment</option>
+        <option>Medical Negligence</option>
+        <option>Motor Accident</option>
+        <option>Muslim Law</option>
+        <option>NCLT</option>
+        <option>NRI</option>
+        <option>Patent</option>
+        <option>Personal Injury</option>
+        <option>PMLA</option>
+        <option>POCSO Act</option>
+        <option>Property</option>
+        <option>RTI</option>
+        <option>Recovery</option>
+        <option>Startup</option>
+        <option>Succession Certificate</option>
+        <option>Supreme Court</option>
+        <option>Tax</option>
+        <option>Trademark &amp; Copyright</option>
+        <option>Wills / Trusts</option>
+        <option>Women</option>
+      </select>
+
+      <select name="city">
+        <option value="">Select City</option>
+        <option value="karkala">Karkala</option>
+        <option value="hebri">Hebri</option>
+        <option value="ajekar">Ajekar</option>
+        <option value="mangaluru">Mangaluru</option>
+      </select>
+
+      <input type="number" name="experience" placeholder="Experience (years)" min="0" />
+
+      <select name="language">
+        <option value="">Select Language</option>
+        <option value="english">English</option>
+        <option value="hindi">Hindi</option>
+        <option value="kannada">Kannada</option>
+      </select>
+
+      <select name="rating">
+        <option value="">Select Rating</option>
+        <option value="5">5 Star ★</option>
+        <option value="4">4 Star ★</option>
+        <option value="3">3 Star ★</option>
+        <option value="2">2 Star ★</option>
+        <option value="1">1 Star ★</option>
+      </select>
+
+      <button type="submit" class="apply-btn">Apply</button>
+    </form>
+
+    <!-- Lawyer List -->
+    <div class="lawyer-list animate-on-load">
+      {% for lawyer in lawyers %}
+      <a href="{% url 'lawyer_profile' lawyer.user.id %}" class="lawyer-card-link">
+        <div class="lawyer-card"
+             data-case-type="{{ lawyer.practice_area|lower }}"
+             data-city="{{ lawyer.city|lower }}"
+             data-experience="{{ lawyer.experience }}"
+             data-language="{{ lawyer.language|lower }}"
+             data-rating="{{ lawyer.average_rating|floatformat:0 }}">
+          <div class="lawyer-photo">
+            <img src="{{ lawyer.photo.url }}" alt="Lawyer Photo" />
+          </div>
+          <div class="lawyer-info">
+            <h5>{{ lawyer.user.full_name }}</h5>
+            <p>
+              City: {{ lawyer.city }}<br />
+              Experience: {{ lawyer.experience }} years<br />
+              Language: {{ lawyer.language }}<br />
+              Practice Area: {{ lawyer.practice_area }}<br />
+              <span class="rating-display">
+                <span class="stars">
+                  {% for i in "12345" %}
+                    {% if forloop.counter <= lawyer.average_rating %}
+                      ★
+                    {% else %}
+                      ☆
+                    {% endif %}
+                  {% endfor %}
+                </span>
+                <span class="rating-text">{{ lawyer.average_rating|floatformat:1 }}/5 ({{ lawyer.review_count }} review{{ lawyer.review_count|pluralize }})</span>
+              </span>
+            </p>
+          </div>
+          <a href="{% url 'hire_lawyer' lawyer.user.id %}" class="hire-btn" onclick="event.stopPropagation();">Hire</a>
+        </div>
+      </a>
+      {% empty %}
+        <p class="no-lawyers">No lawyers available right now.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+<script>
+    document.querySelector('.filter-bar').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const caseType = this.case_type.value.toLowerCase();
+      const city = this.city.value.toLowerCase();
+      const experience = parseInt(this.experience.value) || 0;
+      const language = this.language.value.toLowerCase();
+      const rating = parseInt(this.rating.value) || 0;
+
+      const lawyers = document.querySelectorAll('.lawyer-card');
+      let visibleCount = 0;
+
+      lawyers.forEach(card => {
+        const cardCaseType = card.getAttribute('data-case-type') || '';
+        const cardCity = card.getAttribute('data-city') || '';
+        const cardExperience = parseInt(card.getAttribute('data-experience')) || 0;
+        const cardLanguage = card.getAttribute('data-language') || '';
+        const cardRating = parseFloat(card.getAttribute('data-rating')) || 0;
+
+        let show = true;
+        
+        // Case type filter - check if practice area contains the selected case type
+        if (caseType && !cardCaseType.includes(caseType)) show = false;
+        
+        // City filter - exact match
+        if (city && cardCity !== city) show = false;
+        
+        // Experience filter - lawyer must have at least the selected experience
+        if (experience && cardExperience < experience) show = false;
+        
+        // Language filter - check if lawyer speaks the selected language
+        if (language && !cardLanguage.includes(language)) show = false;
+        
+        // Rating filter - EXACT MATCH for the selected rating
+        if (rating && Math.round(cardRating) !== rating) show = false;
+
+        // Show/hide the entire lawyer card link
+        const lawyerLink = card.closest('a');
+        if (lawyerLink) {
+          lawyerLink.style.display = show ? 'block' : 'none';
+        } else {
+          card.style.display = show ? 'flex' : 'none';
+        }
+        
+        if (show) visibleCount++;
+      });
+
+      // Handle no results message
+      const lawyerList = document.querySelector('.lawyer-list');
+      let noLawyersMsg = lawyerList.querySelector('.no-lawyers-filtered');
+      
+      if (visibleCount === 0) {
+        if (!noLawyersMsg) {
+          const msg = document.createElement('p');
+          msg.className = 'no-lawyers-filtered';
+          msg.style.cssText = `
+            text-align: center;
+            color: #ecf0f1;
+            font-size: 1.2rem;
+            padding: 3rem 1rem;
+            background: rgba(240, 243, 244, 0.15);
+            border-radius: 16px;
+            border: 1px solid rgba(22, 160, 133, 0.2);
+            margin-top: 2rem;
+          `;
+          msg.textContent = 'No lawyers match your filter criteria.';
+          lawyerList.appendChild(msg);
+        } else {
+          noLawyersMsg.style.display = 'block';
+        }
+      } else if (noLawyersMsg) {
+        noLawyersMsg.style.display = 'none';
+      }
+    });
+
+    // Add reset functionality
+    function resetFilters() {
+      const form = document.querySelector('.filter-bar');
+      form.reset();
+      
+      // Show all lawyers
+      const lawyers = document.querySelectorAll('.lawyer-card');
+      lawyers.forEach(card => {
+        const lawyerLink = card.closest('a');
+        if (lawyerLink) {
+          lawyerLink.style.display = 'block';
+        } else {
+          card.style.display = 'flex';
+        }
+      });
+      
+      // Hide no results message
+      const noLawyersMsg = document.querySelector('.no-lawyers-filtered');
+      if (noLawyersMsg) {
+        noLawyersMsg.style.display = 'none';
+      }
+    }
+
+    // Add reset button to filter bar
+    document.addEventListener('DOMContentLoaded', function() {
+      const filterBar = document.querySelector('.filter-bar');
+      const resetBtn = document.createElement('button');
+      resetBtn.type = 'button';
+      resetBtn.className = 'apply-btn';
+      resetBtn.textContent = 'Reset';
+      resetBtn.style.background = 'linear-gradient(180deg, #e74c3c 0%, #c0392b 100%)';
+      resetBtn.onclick = resetFilters;
+      filterBar.appendChild(resetBtn);
+    });
+</script>
+</body>
+</html>

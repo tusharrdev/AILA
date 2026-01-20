@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AILA - Manage Lawyers</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .lawyer-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        }
+
+        .lawyer-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .lawyer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .lawyer-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .lawyer-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+
+        .lawyer-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .lawyer-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .detail-item {
+            background: rgba(255,255,255,0.1);
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #e0e0e0;
+        }
+
+        .detail-value {
+            color: #fff;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            padding: 0.6rem 1rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            flex: 1;
+            text-align: center;
+        }
+
+        .btn-report {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-report:hover {
+            background: #d97706;
+            transform: translateY(-2px);
+        }
+
+        .btn-remove {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-remove:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 4rem;
+            color: rgba(255,255,255,0.7);
+            font-size: 1.2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: #fff;
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            color: #333;
+        }
+
+        .modal-header {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+        }
+
+        .btn-cancel {
+            background: #6b7280;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn-submit {
+            background: #3b82f6;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .messages {
+            margin-bottom: 2rem;
+        }
+
+        .message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .message.success {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+        }
+
+        .message.error {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+        }
+
+        @media (max-width: 768px) {
+            .lawyer-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .lawyer-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="{% url 'admin_dashboard' %}" class="back-btn">← Back to Dashboard</a>
+            <h1 class="page-title">Manage Lawyers</h1>
+            <div></div>
+        </div>
+
+        <!-- Messages -->
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if approved_lawyers %}
+            <div class="lawyer-grid">
+                {% for lawyer in approved_lawyers %}
+                    <div class="lawyer-card">
+                        <div class="lawyer-header">
+                            <img src="{{ lawyer.photo.url }}" alt="{{ lawyer.user.full_name }}" class="lawyer-photo">
+                            <div class="lawyer-name">{{ lawyer.user.full_name }}</div>
+                        </div>
+                        
+                        <div class="lawyer-details">
+                            <div class="detail-item">
+                                <div class="detail-label">Email:</div>
+                                <div class="detail-value">{{ lawyer.user.email }}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Phone:</div>
+                                <div class="detail-value">{{ lawyer.phone }}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">City:</div>
+                                <div class="detail-value">{{ lawyer.city }}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Experience:</div>
+                                <div class="detail-value">{{ lawyer.experience }} years</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Languages:</div>
+                                <div class="detail-value">{{ lawyer.language }}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Practice Area:</div>
+                                <div class="detail-value">{{ lawyer.practice_area }}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Enrollment #:</div>
+                                <div class="detail-value">{{ lawyer.enrollment_number }}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Joined:</div>
+                                <div class="detail-value">{{ lawyer.user.date_joined|date:"M d, Y" }}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="button-group">
+                            <button onclick="openReportModal({{ lawyer.id }}, '{{ lawyer.user.full_name }}')" class="btn btn-report">📧 Send Report</button>
+                            <button onclick="confirmRemoval({{ lawyer.id }}, '{{ lawyer.user.full_name }}')" class="btn btn-remove">🗑️ Remove</button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-data">
+                <h2>👨‍⚖️ No Active Lawyers</h2>
+                <p>No approved lawyers found in the system.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Report Modal -->
+    <div id="reportModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeReportModal()">&times;</span>
+            <div class="modal-header">Send Report to Lawyer</div>
+            <form id="reportForm" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="report_subject">Subject:</label>
+                    <input type="text" id="report_subject" name="report_subject" placeholder="Enter report subject..." required>
+                </div>
+                <div class="form-group">
+                    <label for="report_message">Message:</label>
+                    <textarea id="report_message" name="report_message" placeholder="Enter your report message..." required></textarea>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn-cancel" onclick="closeReportModal()">Cancel</button>
+                    <button type="submit" class="btn-submit">Send Report</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Removal Modal -->
+    <div id="removalModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeRemovalModal()">&times;</span>
+            <div class="modal-header">Remove Lawyer</div>
+            <form id="removalForm" method="post">
+                {% csrf_token %}
+                <p>Are you sure you want to remove <strong id="removalLawyerName"></strong>?</p>
+                <div class="form-group">
+                    <label for="removal_reason">Reason for removal (optional):</label>
+                    <textarea id="removal_reason" name="removal_reason" placeholder="Enter reason for removal..."></textarea>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn-cancel" onclick="closeRemovalModal()">Cancel</button>
+                    <button type="submit" class="btn-remove">Remove Lawyer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Report Modal Functions
+        function openReportModal(lawyerId, lawyerName) {
+            document.getElementById('reportModal').style.display = 'block';
+            document.getElementById('reportForm').action = `/management/send-report/${lawyerId}/`;
+        }
+
+        function closeReportModal() {
+            document.getElementById('reportModal').style.display = 'none';
+            document.getElementById('reportForm').reset();
+        }
+
+        // Removal Modal Functions
+        function confirmRemoval(lawyerId, lawyerName) {
+            document.getElementById('removalModal').style.display = 'block';
+            document.getElementById('removalLawyerName').textContent = lawyerName;
+            document.getElementById('removalForm').action = `/management/remove-lawyer/${lawyerId}/`;
+        }
+
+        function closeRemovalModal() {
+            document.getElementById('removalModal').style.display = 'none';
+            document.getElementById('removalForm').reset();
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const reportModal = document.getElementById('reportModal');
+            const removalModal = document.getElementById('removalModal');
+            
+            if (event.target === reportModal) {
+                closeReportModal();
+            }
+            if (event.target === removalModal) {
+                closeRemovalModal();
+            }
+        }
+    </script>
+</body>
+</html>

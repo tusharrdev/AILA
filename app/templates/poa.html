@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Power of Attorney</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background: #f9f9f9;
+}
+
+.container {
+  max-width: 960px;
+  margin: auto;
+  background: white;
+  padding: 30px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.header, .form-section, .preview-section {
+  margin-bottom: 30px;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+.form-group, .form-row {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.checkbox-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  font-weight: normal;
+  margin-bottom: 5px;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: auto;
+  margin-right: 8px;
+  margin-top: 0;
+}
+
+.btn {
+  padding: 12px 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 4px;
+  display: inline-block;
+  margin: 10px 5px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #0056b3;
+}
+
+.btn-success {
+  background: #28a745;
+  color: white;
+}
+
+.btn-success:hover {
+  background: #1e7e34;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #545b62;
+}
+
+.btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.btn-center {
+  display: block;
+  margin: 20px auto;
+}
+
+.preview-section {
+  display: none;
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  padding: 20px;
+  background: #f8f9fa;
+}
+
+.preview-content {
+  background: white;
+  padding: 30px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  max-height: 600px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+}
+
+.preview-content h3 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 10px;
+}
+
+.editable-content {
+  line-height: 1.6;
+  font-size: 14px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: 'Times New Roman', serif;
+}
+
+.signature-section {
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.signature-block {
+  width: 45%;
+  text-align: center;
+}
+
+.signature-line {
+  border-bottom: 1px solid #000;
+  height: 40px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.signature-label {
+  font-size: 12px;
+  margin-bottom: 15px;
+}
+
+.name-label {
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.witness-section {
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.witness-block {
+  width: 45%;
+  text-align: center;
+}
+
+.notary-section {
+  margin-top: 40px;
+  border-top: 1px solid #ddd;
+  padding-top: 20px;
+}
+
+.notary-block {
+  text-align: left;
+}
+
+.notary-block h4 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.notary-block p {
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.notary-signature {
+  margin-top: 30px;
+  width: 300px;
+  margin-left: auto;
+  text-align: center;
+}
+
+.preview-actions {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #ddd;
+}
+
+.form-section.hidden {
+  display: none;
+}
+
+.edit-note {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  color: #856404;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .signature-section, .witness-section {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .signature-block, .witness-block {
+    width: 100%;
+  }
+  
+  .checkbox-group {
+    grid-template-columns: 1fr;
+  }
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>⚖️ Power of Attorney</h1>
+    </div>
+    
+    <div class="form-section" id="formSection">
+      <form id="poaForm">
+        <div class="form-group">
+          <label>Document Date</label>
+          <input type="date" id="documentDate" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Principal Name (Person Granting Power)</label>
+            <input type="text" id="principalName" placeholder="Enter principal's full name" required>
+          </div>
+          <div class="form-group">
+            <label>Agent Name (Person Receiving Power)</label>
+            <input type="text" id="agentName" placeholder="Enter agent's full name" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Principal Address</label>
+            <textarea id="principalAddress" placeholder="Enter principal's complete address" required></textarea>
+          </div>
+          <div class="form-group">
+            <label>Agent Address</label>
+            <textarea id="agentAddress" placeholder="Enter agent's complete address" required></textarea>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Type of Power of Attorney</label>
+          <select id="poaType" required>
+            <option value="">Select type</option>
+            <option value="general">General Power of Attorney</option>
+            <option value="limited">Limited Power of Attorney</option>
+            <option value="durable">Durable Power of Attorney</option>
+            <option value="healthcare">Healthcare Power of Attorney</option>
+            <option value="financial">Financial Power of Attorney</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Effective Date</label>
+          <select id="effectiveDate" required>
+            <option value="">Select when this becomes effective</option>
+            <option value="immediately">Immediately upon signing</option>
+            <option value="incapacity">Upon incapacity of Principal</option>
+            <option value="specific">On a specific date</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="specificDateGroup" style="display: none;">
+          <label>Specific Effective Date</label>
+          <input type="date" id="specificEffectiveDate">
+        </div>
+
+        <div class="form-group">
+          <label>Expiration</label>
+          <select id="expiration" required>
+            <option value="">Select expiration</option>
+            <option value="no_expiration">No expiration (until revoked)</option>
+            <option value="specific_date">Specific date</option>
+            <option value="specific_event">Upon specific event</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="expirationDateGroup" style="display: none;">
+          <label>Expiration Date</label>
+          <input type="date" id="expirationDate">
+        </div>
+
+        <div class="form-group" id="expirationEventGroup" style="display: none;">
+          <label>Expiration Event</label>
+          <textarea id="expirationEvent" placeholder="Describe the event that will terminate this power of attorney"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Powers Granted (Check all that apply)</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" id="realEstate" value="real_estate"> Real Estate Transactions</label>
+            <label><input type="checkbox" id="banking" value="banking"> Banking and Financial Transactions</label>
+            <label><input type="checkbox" id="business" value="business"> Business Operations</label>
+            <label><input type="checkbox" id="legal" value="legal"> Legal Proceedings</label>
+            <label><input type="checkbox" id="tax" value="tax"> Tax Matters</label>
+            <label><input type="checkbox" id="insurance" value="insurance"> Insurance Claims</label>
+            <label><input type="checkbox" id="government" value="government"> Government Benefits</label>
+            <label><input type="checkbox" id="personal" value="personal"> Personal and Family Maintenance</label>
+            <label><input type="checkbox" id="healthcare_decisions" value="healthcare_decisions"> Healthcare Decisions</label>
+            <label><input type="checkbox" id="contracts" value="contracts"> Enter into Contracts</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Specific Powers/Limitations (Optional)</label>
+          <textarea id="specificPowers" placeholder="Describe any specific powers or limitations on the agent's authority"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Successor Agent (Optional)</label>
+          <input type="text" id="successorAgent" placeholder="Name of successor agent if primary agent cannot serve">
+        </div>
+
+        <div class="form-group">
+          <label>Successor Agent Address (Optional)</label>
+          <textarea id="successorAgentAddress" placeholder="Address of successor agent"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Witness 1 Name</label>
+          <input type="text" id="witness1Name" placeholder="Enter first witness name" required>
+        </div>
+
+        <div class="form-group">
+          <label>Witness 1 Address</label>
+          <textarea id="witness1Address" placeholder="Enter first witness address" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Witness 2 Name</label>
+          <input type="text" id="witness2Name" placeholder="Enter second witness name" required>
+        </div>
+
+        <div class="form-group">
+          <label>Witness 2 Address</label>
+          <textarea id="witness2Address" placeholder="Enter second witness address" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Notary Required</label>
+          <select id="notaryRequired" required>
+            <option value="">Select option</option>
+            <option value="yes">Yes - Document will be notarized</option>
+            <option value="no">No - Document will not be notarized</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Additional Terms (Optional)</label>
+          <textarea id="additionalTerms" placeholder="Any additional terms, conditions, or instructions"></textarea>
+        </div>
+
+        <button type="button" class="btn btn-primary btn-center" onclick="generatePreview()">
+          📋 Generate Preview
+        </button>
+      </form>
+    </div>
+
+    <div class="preview-section" id="previewSection">
+      <div class="edit-note">
+        <strong>📝 Preview Mode:</strong> You can edit the document content below. Click and modify any text as needed before downloading.
+      </div>
+      
+      <div class="preview-content">
+        <h3>POWER OF ATTORNEY</h3>
+        <div id="editableContent" class="editable-content" contenteditable="true">
+          <!-- Generated content will appear here -->
+        </div>
+        <div class="signature-section">
+          <div class="signature-block">
+            <div class="signature-line"></div>
+            <div class="signature-label">Principal Signature</div>
+            <div id="principalNameDisplay" class="name-label">Principal Name</div>
+          </div>
+          <div class="signature-block">
+            <div class="signature-line"></div>
+            <div class="signature-label">Agent Signature (Acceptance)</div>
+            <div id="agentNameDisplay" class="name-label">Agent Name</div>
+          </div>
+        </div>
+        <div class="witness-section">
+          <div class="witness-block">
+            <div class="signature-line"></div>
+            <div class="signature-label">Witness 1 Signature</div>
+            <div id="witness1NameDisplay" class="name-label">Witness 1 Name</div>
+          </div>
+          <div class="witness-block">
+            <div class="signature-line"></div>
+            <div class="signature-label">Witness 2 Signature</div>
+            <div id="witness2NameDisplay" class="name-label">Witness 2 Name</div>
+          </div>
+        </div>
+        <div class="notary-section" id="notarySection">
+          <div class="notary-block">
+            <h4>NOTARY ACKNOWLEDGMENT</h4>
+            <p>On this day who proved to me on the basis of satisfactory evidence to be the person whose name is subscribed to the within instrument and acknowledged to me that he/she executed the same in his/her authorized capacity, and that by his/her signature on the instrument the person, or the entity upon behalf of which the person acted, executed the instrument.</p>
+            <div class="notary-signature">
+              <div class="signature-line"></div>
+              <div class="signature-label">Notary Public Signature</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="preview-actions">
+        <button type="button" class="btn btn-secondary" onclick="backToForm()">
+          ← Back to Form
+        </button>
+        <button type="button" class="btn btn-success" onclick="downloadPOA()">
+          📄 Download PDF Document
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function getValue(id) {
+  return document.getElementById(id).value || "";
+}
+
+function getCheckedValues(name) {
+  const checkboxes = document.querySelectorAll(`input[name="${name}"]:checked`);
+  return Array.from(checkboxes).map(cb => cb.value);
+}
+
+function getAllCheckedPowers() {
+  const powerCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+  return Array.from(powerCheckboxes).map(cb => cb.value);
+}
+
+function validateForm() {
+  const requiredFields = [
+    'documentDate', 'principalName', 'agentName', 'principalAddress', 'agentAddress',
+    'poaType', 'effectiveDate', 'expiration', 'witness1Name', 'witness1Address',
+    'witness2Name', 'witness2Address', 'notaryRequired'
+  ];
+  
+  for (let field of requiredFields) {
+    if (!getValue(field).trim()) {
+      alert(`Please fill in the ${field.replace(/([A-Z])/g, ' $1').toLowerCase()}`);
+      return false;
+    }
+  }
+
+  // Check if specific date is required
+  if (getValue('effectiveDate') === 'specific' && !getValue('specificEffectiveDate')) {
+    alert('Please select the specific effective date');
+    return false;
+  }
+
+  if (getValue('expiration') === 'specific_date' && !getValue('expirationDate')) {
+    alert('Please select the expiration date');
+    return false;
+  }
+
+  if (getValue('expiration') === 'specific_event' && !getValue('expirationEvent').trim()) {
+    alert('Please describe the expiration event');
+    return false;
+  }
+
+  // Check if at least one power is selected
+  const checkedPowers = getAllCheckedPowers();
+  if (checkedPowers.length === 0) {
+    alert('Please select at least one power to grant to the agent');
+    return false;
+  }
+
+  return true;
+}
+
+function getPowersList() {
+  const powerMap = {
+    'real_estate': 'Real Estate Transactions',
+    'banking': 'Banking and Financial Transactions',
+    'business': 'Business Operations',
+    'legal': 'Legal Proceedings',
+    'tax': 'Tax Matters',
+    'insurance': 'Insurance Claims',
+    'government': 'Government Benefits',
+    'personal': 'Personal and Family Maintenance',
+    'healthcare_decisions': 'Healthcare Decisions',
+    'contracts': 'Enter into Contracts'
+  };
+
+  const checkedPowers = getAllCheckedPowers();
+  return checkedPowers.map(power => powerMap[power] || power).join(', ');
+}
+
+function getEffectiveClause() {
+  const effectiveDate = getValue('effectiveDate');
+  switch (effectiveDate) {
+    case 'immediately':
+      return 'This Power of Attorney shall become effective immediately upon execution.';
+    case 'incapacity':
+      return 'This Power of Attorney shall become effective only upon the incapacity of the Principal as determined by a licensed physician.';
+    case 'specific':
+      return `This Power of Attorney shall become effective on ${getValue('specificEffectiveDate')}.`;
+    default:
+      return '';
+  }
+}
+
+function getExpirationClause() {
+  const expiration = getValue('expiration');
+  switch (expiration) {
+    case 'no_expiration':
+      return 'This Power of Attorney shall remain in effect until revoked by the Principal or terminated by law.';
+    case 'specific_date':
+      return `This Power of Attorney shall expire on ${getValue('expirationDate')}.`;
+    case 'specific_event':
+      return `This Power of Attorney shall expire upon the occurrence of the following event: ${getValue('expirationEvent')}`;
+    default:
+      return '';
+  }
+}
+
+function generatePOAContent() {
+  const poaType = getValue('poaType').toUpperCase().replace('_', ' ');
+  const successorSection = getValue('successorAgent').trim() 
+    ? `\n\nSUCCESSOR AGENT: In the event that ${getValue('agentName')} is unable or unwilling to serve as Agent, I hereby appoint ${getValue('successorAgent')}, residing at ${getValue('successorAgentAddress')}, as my successor Agent with the same powers and authority as granted to the primary Agent.`
+    : '';
+
+  const additionalTermsSection = getValue('additionalTerms').trim() 
+    ? `\n\nADDITIONAL TERMS: ${getValue('additionalTerms')}`
+    : '';
+
+  const specificPowersSection = getValue('specificPowers').trim()
+    ? `\n\nSPECIFIC POWERS AND LIMITATIONS: ${getValue('specificPowers')}`
+    : '';
+
+  return `${poaType} POWER OF ATTORNEY
+
+KNOW ALL MEN BY THESE PRESENTS:
+
+I, ${getValue('principalName')}, a resident of ${getValue('principalAddress')}, being of sound mind and not acting under duress, fraud, or undue influence, do hereby make, constitute, and appoint ${getValue('agentName')}, residing at ${getValue('agentAddress')}, as my true and lawful Attorney-in-Fact (Agent) to act in my name, place, and stead in any way which I myself could do, if I were personally present, with respect to the following matters:
+
+POWERS GRANTED:
+My Agent is authorized to perform the following acts on my behalf: ${getPowersList()}.
+
+${specificPowersSection}
+
+EFFECTIVE DATE:
+${getEffectiveClause()}
+
+EXPIRATION:
+${getExpirationClause()}
+
+DURABLE POWER:
+${getValue('poaType') === 'durable' ? 'This Power of Attorney shall not be affected by my subsequent disability or incapacity.' : 'This Power of Attorney shall terminate upon my disability or incapacity unless specifically designated as durable.'}
+
+RATIFICATION:
+I hereby ratify and confirm all acts which my Agent shall lawfully do or cause to be done by virtue of this Power of Attorney.
+
+THIRD PARTY RELIANCE:
+Any third party who receives a copy of this document may act under it. Revocation of this Power of Attorney is not effective as to a third party until the third party has actual knowledge of the revocation.
+
+NOMINATION OF GUARDIAN:
+If it becomes necessary for a court to appoint a guardian of my person or property, I nominate my Agent appointed by this document to serve as guardian.
+
+SEVERABILITY:
+If any provision of this Power of Attorney is held to be invalid, illegal, or unenforceable, the remaining provisions shall continue to be valid and enforceable.
+
+GOVERNING LAW:
+This Power of Attorney shall be governed by the laws of the state in which it is executed.
+
+${successorSection}
+
+${additionalTermsSection}
+
+IN WITNESS WHEREOF, I have executed this Power of Attorney on ${getValue('documentDate')}.
+
+By signing below, I acknowledge that I have read and understood this Power of Attorney, and I execute it voluntarily.
+
+PRINCIPAL: ${getValue('principalName')}
+
+AGENT ACCEPTANCE:
+I, ${getValue('agentName')}, acknowledge that I have read the foregoing Power of Attorney and am familiar with its contents. I understand the responsibilities imposed upon me by this document and agree to act in accordance with the Principal's wishes as expressed herein.
+
+AGENT: ${getValue('agentName')}
+
+WITNESSES:
+We, the undersigned witnesses, each individually being duly sworn, depose and say that the Principal signed the Power of Attorney in our presence and that the Principal appeared to be of sound mind and under no duress, fraud, or undue influence.
+
+WITNESS 1: ${getValue('witness1Name')}
+Address: ${getValue('witness1Address')}
+
+WITNESS 2: ${getValue('witness2Name')}
+Address: ${getValue('witness2Address')}`;
+}
+
+function generatePreview() {
+  if (!validateForm()) {
+    return;
+  }
+
+  const content = generatePOAContent();
+  document.getElementById('editableContent').textContent = content;
+  
+  // Update signature names
+  document.getElementById('principalNameDisplay').textContent = getValue('principalName');
+  document.getElementById('agentNameDisplay').textContent = getValue('agentName');
+  document.getElementById('witness1NameDisplay').textContent = getValue('witness1Name');
+  document.getElementById('witness2NameDisplay').textContent = getValue('witness2Name');
+  
+  // Show/hide notary section based on selection
+  const notarySection = document.getElementById('notarySection');
+  if (getValue('notaryRequired') === 'yes') {
+    notarySection.style.display = 'block';
+  } else {
+    notarySection.style.display = 'none';
+  }
+  
+  // Hide form and show preview
+  document.getElementById('formSection').classList.add('hidden');
+  document.getElementById('previewSection').style.display = 'block';
+  
+  // Scroll to top of preview
+  document.getElementById('previewSection').scrollIntoView({ behavior: 'smooth' });
+}
+
+function backToForm() {
+  // Show form and hide preview
+  document.getElementById('formSection').classList.remove('hidden');
+  document.getElementById('previewSection').style.display = 'none';
+  
+  // Scroll to top of form
+  document.getElementById('formSection').scrollIntoView({ behavior: 'smooth' });
+}
+
+function downloadPOA() {
+  // Get the content from the editable div
+  const editableElement = document.getElementById('editableContent');
+  let content = '';
+  
+  // Check if content has been edited (HTML) or is original (text)
+  if (editableElement.innerHTML.includes('<div>') || editableElement.innerHTML.includes('<br>')) {
+    // Content has been edited, convert HTML to plain text with proper line breaks
+    content = editableElement.innerHTML
+      .replace(/<div>/g, '\n')
+      .replace(/<\/div>/g, '')
+      .replace(/<br\s*\/?>/g, '\n')
+      .replace(/<[^>]*>/g, '') // Remove any other HTML tags
+      .replace(/&nbsp;/g, ' ')
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"');
+  } else {
+    // Use original text content
+    content = editableElement.textContent || editableElement.innerText;
+  }
+  
+  if (!content.trim()) {
+    alert('No content to download!');
+    return;
+  }
+  
+  try {
+    // Initialize jsPDF
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    // Set font and title
+    doc.setFont('times', 'bold');
+    doc.setFontSize(16);
+    const title = 'POWER OF ATTORNEY';
+    const titleWidth = doc.getTextWidth(title);
+    const pageWidth = doc.internal.pageSize.getWidth();
+    doc.text(title, (pageWidth - titleWidth) / 2, 20);
+    
+    // Add underline for title
+    doc.line((pageWidth - titleWidth) / 2, 22, (pageWidth - titleWidth) / 2 + titleWidth, 22);
+    
+    // Set font for content
+    doc.setFont('times', 'normal');
+    doc.setFontSize(11);
+    
+    // Split content into lines that fit the page width
+    const lines = doc.splitTextToSize(content, 170); // 170 is the usable width
+    
+    let y = 35; // Start position after title
+    const lineHeight = 5;
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const marginBottom = 20; // Leave space for signatures
+    
+    for (let i = 0; i < lines.length; i++) {
+      // Check if we need a new page
+      if (y + lineHeight > pageHeight - marginBottom) {
+        doc.addPage();
+        y = 20; // Reset y position for new page
+      }
+      
+      doc.text(lines[i], 20, y);
+      y += lineHeight;
+    }
+    
+    // Add signature section
+    const signatureY = y + 20;
+    
+    // Check if we need a new page for signatures
+    if (signatureY + 80 > pageHeight - 20) {
+      doc.addPage();
+      y = 20;
+    } else {
+      y = signatureY;
+    }
+    
+    // Signature lines and labels
+    const leftX = 20;
+    const rightX = 120;
+    const lineWidth = 70;
+    
+    // Principal signature
+    doc.line(leftX, y, leftX + lineWidth, y);
+    doc.setFontSize(10);
+    doc.text('Principal Signature', leftX + (lineWidth - doc.getTextWidth('Principal Signature')) / 2, y + 8);
+    doc.text(getValue('principalName'), leftX + (lineWidth - doc.getTextWidth(getValue('principalName'))) / 2, y + 18);
+    
+    // Agent signature
+    doc.line(rightX, y, rightX + lineWidth, y);
+    doc.text('Agent Signature', rightX + (lineWidth - doc.getTextWidth('Agent Signature')) / 2, y + 8);
+    doc.text(getValue('agentName'), rightX + (lineWidth - doc.getTextWidth(getValue('agentName'))) / 2, y + 18);
+    
+    // Witness signatures
+    y += 40;
+    doc.line(leftX, y, leftX + lineWidth, y);
+    doc.text('Witness 1 Signature', leftX + (lineWidth - doc.getTextWidth('Witness 1 Signature')) / 2, y + 8);
+    doc.text(getValue('witness1Name'), leftX + (lineWidth - doc.getTextWidth(getValue('witness1Name'))) / 2, y + 18);
+    
+    doc.line(rightX, y, rightX + lineWidth, y);
+    doc.text('Witness 2 Signature', rightX + (lineWidth - doc.getTextWidth('Witness 2 Signature')) / 2, y + 8);
+    doc.text(getValue('witness2Name'), rightX + (lineWidth - doc.getTextWidth(getValue('witness2Name'))) / 2, y + 18);
+    
+    // Add notary section if required
+    if (getValue('notaryRequired') === 'yes') {
+      y += 60;
+      
+      // Check if we need a new page for notary
+      if (y + 100 > pageHeight - 20) {
+        doc.addPage();
+        y = 20;
+      }
+      
+      doc.setFontSize(12);
+      doc.setFont('times', 'bold');
+      doc.text('NOTARY ACKNOWLEDGMENT', pageWidth / 2, y, { align: 'center' });
+      
+      doc.setFont('times', 'normal');
+      doc.setFontSize(10);
+      y += 20;
+      
+      doc.text('State of: ________________________', leftX, y);
+      y += 15;
+      doc.text('County of: ______________________', leftX, y);
+      y += 20;
+      
+      const notaryText = `On this _____ day of _____________, 20__, before me personally appeared ${getValue('principalName')}, who proved to me on the basis of satisfactory evidence to be the person whose name is subscribed to the within instrument and acknowledged to me that he/she executed the same in his/her authorized capacity, and that by his/her signature on the instrument the person, or the entity upon behalf of which the person acted, executed the instrument.`;
+      
+      const notaryLines = doc.splitTextToSize(notaryText, 170);
+      for (let i = 0; i < notaryLines.length; i++) {
+        doc.text(notaryLines[i], leftX, y);
+        y += 12;
+      }
+      
+      y += 20;
+      doc.line(leftX + 100, y, leftX + 170, y);
+      doc.text('Notary Public Signature', leftX + 135, y + 8, { align: 'center' });
+    }
+    
+    // Save the PDF
+    const filename = `Power_of_Attorney_${getValue('principalName').replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+    doc.save(filename);
+    
+  } catch (error) {
+    console.error('Error generating PDF:', error);
+    alert('Error generating PDF. Please check that jsPDF is loaded correctly.');
+  }
+}
+
+// Event listeners for dynamic form behavior
+document.addEventListener('DOMContentLoaded', function() {
+  // Show/hide specific date field based on effective date selection
+  document.getElementById('effectiveDate').addEventListener('change', function() {
+    const specificDateGroup = document.getElementById('specificDateGroup');
+    if (this.value === 'specific') {
+      specificDateGroup.style.display = 'block';
+    } else {
+      specificDateGroup.style.display = 'none';
+    }
+  });
+  
+  // Show/hide expiration date/event fields based on expiration selection
+  document.getElementById('expiration').addEventListener('change', function() {
+    const expirationDateGroup = document.getElementById('expirationDateGroup');
+    const expirationEventGroup = document.getElementById('expirationEventGroup');
+    
+    if (this.value === 'specific_date') {
+      expirationDateGroup.style.display = 'block';
+      expirationEventGroup.style.display = 'none';
+    } else if (this.value === 'specific_event') {
+      expirationDateGroup.style.display = 'none';
+      expirationEventGroup.style.display = 'block';
+    } else {
+      expirationDateGroup.style.display = 'none';
+      expirationEventGroup.style.display = 'none';
+    }
+  });
+  
+  // Set default date to today
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('documentDate').value = today;
+});
+  </script>
+</body>
+</html>
