@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-2#if)_k$m&!h80u0+$vl-kz^$j$(swq%7@e@avv=s_i6(9n9ls"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+import os
+DEBUG = False
+ALLOWED_HOSTS = ['*']
 AUTH_USER_MODEL = 'app.CustomUser'
 
 
@@ -43,13 +43,15 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Add this line
+    'django.contrib.sessions.middleware.SessionMiddleware',
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    
 ]
 
 ROOT_URLCONF = "proj.urls"
@@ -124,7 +126,7 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-import os
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -175,3 +177,5 @@ MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10MB
 # Ensure media directory exists
 os.makedirs(MEDIA_ROOT, exist_ok=True)
 os.makedirs(TEMP_DOCUMENTS_DIR, exist_ok=True)
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
