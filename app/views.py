@@ -1387,11 +1387,18 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.docstore.document import Document as LangChainDocument
 
 # Load environment variables
+import os
 from dotenv import load_dotenv
 load_dotenv()
 
 # Global variables for vector stores
-embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+try:
+    embeddings = GoogleGenerativeAIEmbeddings(
+        model="models/embedding-001",
+        google_api_key=os.getenv("GOOGLE_API_KEY")
+    )
+except Exception as e:
+    embeddings = None 
 general_db = FAISS.load_local("my_vector_store", embeddings, allow_dangerous_deserialization=True)
 document_vector_stores = {}  # Store document-specific vector stores
 
