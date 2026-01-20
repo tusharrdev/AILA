@@ -3,3 +3,7 @@ PyPDF2==3.0.1
 python-docx==0.8.11
 mammoth==1.6.0
 Django>=4.2,<5.0
+gunicorn>=21.0.0
+channels>=4.0.0
+channels-redis>=4.0.0
+daphne>=4.0.0
