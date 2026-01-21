@@ -24,9 +24,28 @@ SECRET_KEY = "django-insecure-2#if)_k$m&!h80u0+$vl-kz^$j$(swq%7@e@avv=s_i6(9n9ls
 
 # SECURITY WARNING: don't run with debug turned on in production!
 import os
-DEBUG = False
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = ['*']
 AUTH_USER_MODEL = 'app.CustomUser'
+
+ALLOWED_HOSTS = [
+    'aila-a7zy.onrender.com',
+    'localhost',
+    '127.0.0.1',
+]
+
+# CSRF Settings - This is critical!
+CSRF_TRUSTED_ORIGINS = [
+    'https://aila-a7zy.onrender.com',
+]
+
+# Security settings for production
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    CSRF_COOKIE_HTTPONLY = False  # Important for JavaScript access
+    SESSION_COOKIE_HTTPONLY = True
 
 
 # Application definition
